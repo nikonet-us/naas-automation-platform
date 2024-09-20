@@ -234,7 +234,7 @@ Include a glossary to define key terms and acronyms used throughout the document
 
 ### References and Further Reading
 
-- [Nautobot Documentation](https://nautobot.readthedocs.io/)
+- [Nautobot](https://nautobot.readthedocs.io/)
 - [Cisco Network Services Orchestrator (NSO)](https://www.cisco.com/c/en/us/products/cloud-systems-management/network-services-orchestrator/index.html)
 - [Cisco Modeling Labs (CML)](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html)
 - [Cisco pyATS](https://developer.cisco.com/docs/pyats/)
