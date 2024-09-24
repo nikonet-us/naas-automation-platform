@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In today's rapidly evolving digital landscape, efficient network management is critical for maintaining scalable and resilient IT infrastructures. Traditional management methods, while providing control, often struggle to keep up with the complexity and speed required in modern environments. This presentation explores the challenges of classical network management and proposes the **Network as a Service (NaaS) Automation Platform** as a forward-thinking solution designed to address these issues. While still in the conceptual phase, the NaaS Automation Platform offers a blueprint for automating and optimizing the full lifecycle of network services, ensuring scalability, consistency, and operational efficiency.
+In today's rapidly evolving digital landscape, efficient network management is critical for maintaining scalable and resilient IT infrastructures. Traditional management methods, while providing control, often struggle to keep up with the complexity and speed required in modern environments. This presentation explores the challenges of classical network management and proposes the **Network as a Service (NaaS) Automation Platform** as a forward-thinking solution designed to address these issues. The NaaS Automation Platform offers a blueprint for automating and optimizing the full lifecycle of network services, ensuring scalability, consistency, and operational efficiency.
 
 ## The Challenges of Classical Network Management
 
@@ -31,7 +31,7 @@ In short, network automation provides the agility, scalability, and consistency 
 
 ## Introducing the NaaS Automation Platform
 
-In response to the growing challenges of classical network management, the **Network as a Service (NaaS) Automation Platform** proposes a comprehensive solution to address the complexity, scale, and operational demands of modern networks. While still in the conceptual phase, the NaaS platform outlines a blueprint for automating and streamlining the full lifecycle of network services across diverse environments, including Enterprise, Data Centers, Cloud, and Service Provider networks.
+In response to the growing challenges of classical network management, the **Network as a Service (NaaS) Automation Platform** offers a comprehensive solution to address the complexity, scale, and operational demands of modern networks. The NaaS platform automates and streamlines the full lifecycle of network services across diverse environments, including Enterprise, Data Centers, Cloud, and Service Provider networks.
 
 The NaaS platform introduces a unified approach to managing network infrastructure by applying modern practices such as **Infrastructure as Code (IaC)** and **GitOps**. These principles ensure that all network configurations are maintained in version-controlled repositories, enabling consistent, repeatable, and traceable network changes. By integrating automation into every step of the network service lifecycle—from provisioning to monitoring—NaaS aims to enhance scalability, improve reliability, and reduce manual intervention.
 
@@ -97,58 +97,72 @@ The NaaS Automation Platform integrates a suite of core technologies, each playi
 - **Role**: Store and manage network data, configurations, and inventory.
 - **Features**: Extensible data models, powerful APIs, and integration capabilities with various network automation tools.
 
-Nautobot is a powerful network automation tool designed to store and manage comprehensive network data, configurations, and inventory. It boasts extensible data models that allow for the customization and scaling of network inventories to meet diverse organizational needs. With its robust APIs, Nautobot offers seamless integration capabilities with a wide range of network automation tools, facilitating streamlined workflows and efficient data synchronization across the network infrastructure.
+Nautobot is an open-source network automation platform designed to act as a **Source of Truth (SoT)** for network operations. It provides a centralized repository for all network-related data, such as device configurations, inventory, and topology data. Its flexible and extensible data models allow it to scale according to the needs of any organization. With robust APIs, Nautobot facilitates integration with other automation and orchestration tools, making it an essential component for modern network automation workflows.
 
-One of Nautobot's key capabilities lies in its ability to manage various types of network data, including device inventory, IP addressing, connectivity, and network services. By maintaining detailed records of network devices, VLANs, subnets, and IP addresses, Nautobot ensures that all network configurations are consistently maintained and easily accessible. This centralized management of network data not only enhances accuracy and efficiency in network operations but also serves as the foundation for automated provisioning and configuration management.
-
-Positioned as the central source of truth within the NaaS Automation Platform, Nautobot plays a pivotal role in orchestrating and automating network services. Its integration with other tools in the platform enables automated provisioning, validation, and deployment of network configurations. By serving as the hub for all network-related information, Nautobot ensures that network changes are accurately reflected and efficiently managed across the entire NaaS ecosystem, thereby enhancing reliability, reducing the potential for human error, and supporting scalable network operations.
+Within the NaaS Automation Platform, Nautobot plays a central role by collecting and maintaining all the necessary data to build network configurations. It integrates seamlessly with other tools in the platform to ensure that all network configurations are up-to-date, accurate, and ready for deployment. By acting as the platform's main data repository, Nautobot enables automated network configuration generation, provisioning, and management, supporting the platform’s goal of efficient and scalable network automation.
 
 ### Cisco NSO
 
 - **Role**: Provision and manage network devices based on data provided by Nautobot.
 - **Features**: Model-driven service orchestration, multi-vendor support, and service lifecycle management.
 
-Cisco Network Services Orchestrator (NSO) is a robust network automation platform designed to provision and manage network devices across diverse environments. It utilizes **model-driven service orchestration** to abstract complex network configurations into manageable templates, simplifying deployment processes and reducing configuration errors. With its **multi-vendor support**, Cisco NSO handles devices from various manufacturers, providing the flexibility and scalability necessary for large-scale network infrastructures. Additionally, Cisco NSO offers comprehensive **service lifecycle management**, enabling seamless updates, maintenance, and decommissioning of network services throughout their operational lifespan.
+Cisco Network Services Orchestrator (NSO) is a powerful automation platform designed to provision and manage network devices across diverse network environments. NSO is built around a **model-driven** architecture, meaning it uses network models (YANG) to abstract device-specific details, making it possible to manage a wide range of vendors and technologies through a unified interface. NSO offers **multi-vendor support**, ensuring compatibility with different device types and technologies while also enabling **service lifecycle management**—from initial provisioning to updates and decommissioning. This allows for highly reliable, automated operations across a variety of network devices and platforms, reducing manual intervention and enhancing scalability.
 
-One of Cisco NSO's key capabilities is its ability to automate the provisioning and management of network devices using configurations provided by external systems. NSO abstracts network device complexity using YANG-based service models, ensuring that configurations are applied consistently across the network. This approach significantly reduces manual intervention and configuration errors, allowing for fast and accurate network deployments.
-
-In the NaaS Automation Platform, Cisco NSO works closely with Nautobot to automate the deployment of network services. Nautobot calculates and prepares the required device configurations and transmits them to Cisco NSO via the **RESTCONF API**. NSO then applies these configurations to the network devices using its **southbound protocols** such as NETCONF, RESTCONF, SNMP, or CLI. This tight integration ensures that network services are accurately provisioned and managed, reducing human errors and improving service delivery speed. Cisco NSO’s role in orchestrating and applying configurations provided by Nautobot makes it a key enabler of the platform’s automation capabilities, supporting efficient and scalable network operations.
+In the NaaS Automation Platform, Cisco NSO works closely with Nautobot to handle device-level configuration and provisioning. Nautobot pre-computes all the necessary device configurations and sends them to Cisco NSO over its **northbound RESTCONF API**. NSO then takes these configurations and distributes them to individual devices using its **Network Element Drivers (NEDs)**, which utilize **NETCONF, RESTCONF, SNMP, or CLI** to interface with the devices. This workflow ensures that all network configurations are deployed consistently and efficiently, leveraging Cisco NSO’s robust orchestration capabilities to manage complex, multi-vendor networks.
 
 ### Service Portal
 
 - **Role**: Customer-facing portal for requesting network services.
 - **Features**: Self-service interface, request tracking, and integration with automation processes.
-- **Additional Information**: By integrating with Nautobot, the Service Portal allows users to submit network service requests directly, which Nautobot then processes and manages. This seamless integration ensures that service requests are efficiently handled and reflected in the network configurations. The self-service nature of the portal empowers users to request and track services without needing direct intervention from the network engineering team, enhancing user satisfaction and operational efficiency.
+
+The **Service Portal** acts as the main interface for end-users to request network services in an automated and streamlined manner. It provides a self-service platform where users can submit service requests, monitor their status, and interact with the underlying network infrastructure without needing direct support from network engineers. The portal is built with intuitive user interaction features that simplify complex processes like network provisioning, ensuring ease of use for both technical and non-technical users.
+
+Within the **NaaS Automation Platform**, all service requests submitted through the Service Portal are forwarded to **Nautobot** for processing. Nautobot analyzes each request, assessing the required infrastructure resources—such as IP addresses, subnets, and devices—and determines what is available or needs to be provisioned. By automating the resource allocation and provisioning steps, the Service Portal ensures that services are efficiently deployed without manual intervention, speeding up delivery times and maintaining consistency across the network.
 
 ### Jira/Confluence
 
 - **Role**: Coordination, task tracking, and documentation for human-to-human interactions.
 - **Features**: Task management, issue tracking, cross-team collaboration, and centralized documentation.
-- **Additional Information**: Nautobot uses Jira's REST API to create and assign tasks based on events and database changes. Additionally, Jira's webhooks communicate updates back to Nautobot, ensuring that task tracking and network management are tightly integrated and up-to-date. Confluence complements this by providing a centralized repository for documentation, facilitating knowledge sharing and collaboration across teams. This integration streamlines project management and ensures that all network changes are properly documented and tracked.
+
+**Jira** and **Confluence** are essential tools for managing coordination and documentation within the NaaS Automation Platform. **Jira** facilitates task management, allowing teams to assign, track, and manage activities related to network service delivery. It ensures that all tasks are organized, deadlines are met, and dependencies are clear. Meanwhile, **Confluence** serves as the central repository for documentation, including High-Level Designs (HLDs), Low-Level Designs (LLDs), and all other resources related to network automation. It provides a collaborative environment where teams can document processes, share knowledge, and ensure that everyone involved in the network lifecycle has access to up-to-date information.
+
+In the **NaaS Automation Platform**, **Nautobot** integrates seamlessly with **Jira** to automate the creation of tasks based on service requests. For example, when a new service request is submitted through the **Service Portal**, Nautobot analyzes the request and automatically generates relevant tasks in **Jira** for different departments—such as purchasing, network engineering, and facilities—based on the infrastructure and service requirements. This automated task creation reduces the administrative burden on network teams and ensures that service requests are fulfilled in a timely and coordinated manner. 
 
 ### Git/GitHub
 
 - **Role**: Provide version control and a collaborative development environment.
 - **Features**: Version control, pull requests, issue tracking, and integration with CI/CD pipelines.
-- **Additional Information**: Nautobot uses the pyGitHub API library to fetch network changes represented in YAML files from repositories and processes them to make changes. This integration ensures that network configurations are version-controlled and can be collaboratively managed and deployed through the CI/CD pipeline. GitHub's collaborative features, such as pull requests and code reviews, enhance the quality and consistency of network configurations by enabling multiple engineers to contribute and validate changes effectively.
 
-### kea-dns-server
+**Git** is a widely-used version control system that allows teams to collaborate on code and manage changes efficiently. Paired with **GitHub**, a cloud-based platform built on Git, it provides additional features such as pull requests, code reviews, issue tracking, and seamless integration with CI/CD pipelines. GitHub is a central hub for managing repositories, enabling teams to work on code simultaneously, track progress, and ensure that changes are deployed in a controlled and traceable manner. It allows engineers to collaborate effectively on network automation workflows, leveraging Git's branching and merging capabilities to maintain consistency and manage complex development cycles.
 
-- **Role**: Provide DNS services for dynamic registration of IP addresses and FQDNs.
-- **Features**: Automatic DNS registration, integration with DHCP for seamless IP-to-FQDN mapping, and high scalability.
-- **Additional Information**: Nautobot computes DNS records configuration files and sends them to the kea-dns-server via RESTful API. This integration ensures that DNS entries are automatically updated in response to network changes, maintaining accurate and up-to-date name resolution across the network. The automatic registration and dynamic mapping capabilities of kea-dns-server reduce manual DNS management efforts and enhance network reliability.
+Within the **NaaS Automation Platform**, **GitHub** plays a crucial role in storing the YAML files that represent network configurations and other automation instructions. **Nautobot** integrates directly with **GitHub** to pull these YAML files, ensuring that all configurations are version-controlled and traceable. When new changes are committed to the GitHub repository, **Nautobot** triggers the appropriate automation workflows to update network devices and services based on the latest configurations. This ensures that network updates are applied consistently, with a clear audit trail of changes, and that configuration management is fully automated across the NaaS platform.
 
 ### kea-dhcp-server
 
 - **Role**: Provide DHCP services for network infrastructures.
 - **Features**: High performance, extensibility, and rich configuration options.
-- **Additional Information**: Nautobot computes DHCP records configuration files and sends them to the kea-dhcp-server via RESTful API. This integration automates the assignment of IP addresses and network configurations, ensuring efficient and conflict-free DHCP operations. The high-performance and extensible nature of kea-dhcp-server make it well-suited for large-scale and dynamic network environments, supporting seamless IP management and network scalability.
-   
+
+**kea-dhcp-server** is an open-source, modern DHCP server developed by the Internet Systems Consortium (ISC). It is designed to provide high-performance, scalable, and flexible DHCP services for both IPv4 and IPv6 networks. The kea-dhcp-server supports dynamic IP address allocation, and its extensible architecture allows for custom hooks and configurations tailored to specific network environments. With its REST API, Kea is well-suited for integration with network automation systems, enabling real-time updates and dynamic configuration changes.
+
+In the **NaaS Automation Platform**, **Nautobot** pre-computes the DHCP configurations required for the network and automatically updates the **kea-dhcp-server** when necessary. When DHCP-related objects (such as subnets, leases, or pools) are modified in the platform, Nautobot updates the pre-computed DHCP configuration stored in its database. This configuration is then pushed to the kea-dhcp-server via its REST API, ensuring that the DHCP server always has the most up-to-date configuration without the need for manual intervention. This integration ensures seamless IP address management and reduces the risk of configuration errors across the network.
+
+   ### kea-dns-server
+
+- **Role**: Provide DNS services for dynamic registration of IP addresses and FQDNs.
+- **Features**: Automatic DNS registration, high scalability, and support for both IPv4 and IPv6 addressing schemes.
+
+The **kea-dns-server** is a high-performance, scalable DNS server designed to manage DNS name resolution dynamically. It automatically registers and updates DNS records, ensuring that devices on the network are assigned Fully Qualified Domain Names (FQDNs) that are easily discoverable. The server supports both IPv4 and IPv6, providing flexibility and extensibility through its modular architecture. Its ability to scale makes it suitable for networks of all sizes, where maintaining up-to-date DNS records is critical for efficient network operations.
+
+In the **NaaS Automation Platform**, **Nautobot** is responsible for managing and updating DNS records on the **kea-dns-server**. When changes occur in the network, such as new devices being added or IP addresses being reallocated, Nautobot automatically triggers the required updates to ensure that DNS records are accurate and reflect the current state of the network. By automating DNS updates, the platform reduces the need for manual intervention, ensuring that DNS resolution remains consistent and up-to-date.
+
 ### Cisco Modeling Labs (CML)
 
 - **Role**: Validate network service changes in a virtual environment.
 - **Features**: Virtual network simulation, comprehensive device support, and integration with CI/CD pipelines.
-- **Additional Information**: CI/CD pipelines use CML's **REST APIs** to manage virtual environments, allowing for automated creation, configuration, and teardown of simulated network infrastructures. This integration ensures that network changes are thoroughly tested in a controlled and scalable virtual environment before deployment.
+
+**Cisco Modeling Labs (CML)** is a powerful platform for network simulation and validation. It allows engineers to design, simulate, and test network configurations in a fully virtualized environment. CML supports a wide range of device types and network topologies, making it a versatile tool for creating realistic, scalable network simulations. With its ability to replicate production network environments, CML enables thorough testing and validation of network designs and configurations, ensuring that changes can be confidently rolled out without impacting live services. Its flexibility and device coverage make it an ideal solution for network engineers looking to validate complex, multi-vendor environments.
+
+Within the **NaaS Automation Platform**, **Cisco Modeling Labs (CML)** plays a key role in the testing and validation phase. Before network configuration changes are applied to the production environment, they are tested in a virtual network environment managed by CML. This ensures that all changes—such as device configurations, protocols, and connectivity—are thoroughly vetted in a controlled setting. By integrating with the CI/CD pipeline, CML allows automated deployment of test environments, which reduces the risk of errors and improves the overall reliability of network services. 
 
 ### IxNetwork Virtual Edition (VE)
 
