@@ -168,120 +168,109 @@ Within the **NaaS Automation Platform**, **Cisco Modeling Labs (CML)** plays a k
 
 - **Role**: Test and validate network traffic flows.
 - **Features**: Comprehensive network testing, virtual and physical traffic validation, and scalability for production environments.
-- **Additional Information**: IxNetwork VE can be utilized in both virtual environments (such as Cisco Modeling Labs) and production settings. All testing operations are controlled using IxNetwork's **REST APIs**, enabling automated and precise management of traffic flow simulations and validations. This ensures that network configurations perform as expected under various conditions, enhancing overall network reliability and performance.
+
+**IxNetwork Virtual Edition (VE)** is a powerful network testing tool that simulates and validates network traffic flows in both virtual and physical environments. Developed by **Keysight Technologies**, IxNetwork VE offers an extensive set of features to test network performance, including the ability to generate high volumes of traffic, measure latency, and validate network functions. The platform supports a wide variety of network protocols, making it versatile for testing complex, multi-vendor networks. With the ability to scale across virtual environments, IxNetwork VE ensures that network configurations and services meet the required performance standards before being deployed in a production environment.
+
+Within the **NaaS Automation Platform**, **IxNetwork Virtual Edition (VE)** is integrated into both testing and production environments to generate and validate network traffic flows. During the testing phase, IxNetwork VE is used to simulate traffic across virtualized network topologies, ensuring that all network changes meet performance and connectivity standards. In production, it validates that the live network can handle real-world traffic patterns and loads. By automating the traffic validation process, IxNetwork VE helps ensure that the NaaS platform delivers high-quality, scalable network services without introducing performance bottlenecks or failures.
    
 ### Cisco pyATS
 
 - **Role**: Validate network services.
 - **Features**: Automated testing, network device interactions, and comprehensive test coverage.
-- **Additional Information**: Cisco pyATS is an advanced test automation framework designed to streamline the validation of network configurations and services. By automating repetitive testing tasks, pyATS reduces the potential for human error and accelerates the validation process. It facilitates interactions with network devices through various protocols, enabling comprehensive testing of connectivity, routing protocols, and service functionalities. pyATS's extensive test coverage ensures that all aspects of network configurations are thoroughly vetted, enhancing the overall reliability and stability of the network.
+
+**Cisco pyATS** is an advanced test automation framework that simplifies the validation of network services and configurations. pyATS allows engineers to automate network testing by providing extensive capabilities to interact with network devices, execute commands, and validate their behavior. The framework supports a wide variety of testing scenarios, from basic connectivity checks to complex multi-device interactions, ensuring that all elements of the network are functioning as expected. pyATS also integrates seamlessly with existing automation tools, making it easier to test and validate network changes in both virtual and physical environments.
+
+Within the **NaaS Automation Platform**, **Cisco pyATS** is used during the testing phase to validate network changes before they are applied to production environments. After configurations are deployed in a virtual testbed, pyATS executes automated tests to ensure that all network services—such as routing protocols, VLAN configurations, and device connectivity—are functioning correctly. By automating these validation processes, pyATS ensures that network changes are thoroughly tested and verified, reducing the risk of errors and ensuring high-quality deployments across the platform.
 
 ### gNMIc and Prometheus
 
 - **Role**: Collect and aggregate telemetry data.
 - **Features**: Real-time data collection, flexible querying, and alerting capabilities.
-- **Additional Information**: gNMIc and Prometheus work in tandem to gather and process telemetry data from network devices, providing valuable insights into network performance and health. gNMIc leverages the gNMI protocol to efficiently collect configuration and state data, while Prometheus stores and processes this data, enabling real-time monitoring and analysis. The flexible querying capabilities of Prometheus allow for customized data retrieval and reporting, facilitating proactive network management. Additionally, Prometheus's alerting mechanisms notify engineers of any anomalies or performance issues, enabling swift incident response.
+
+**gNMIc** is a flexible open-source tool that provides support for **gRPC Network Management Interface (gNMI)**, a protocol used to collect real-time telemetry data from network devices. gNMIc allows engineers to subscribe to telemetry data streams, retrieve device state information, and analyze metrics that provide insight into the health and performance of network infrastructure. **Prometheus** is a powerful open-source monitoring system known for its flexible querying capabilities and real-time alerting. Prometheus collects time-series data from various sources, making it ideal for tracking metrics such as network latency, traffic, and resource utilization. Together, gNMIc and Prometheus enable comprehensive monitoring and visibility into network operations.
+
+In the **NaaS Automation Platform**, **gNMIc** is responsible for collecting telemetry data from network devices, while **Prometheus** stores and aggregates this data. Prometheus queries the data collected by gNMIc to monitor network performance and identify potential issues in real time. The telemetry data gathered includes critical metrics such as bandwidth usage, packet loss, and device health, which are essential for ensuring optimal network performance. By providing timely alerts and enabling detailed insights, gNMIc and Prometheus allow NaaS to maintain a proactive approach to network monitoring and troubleshooting, ensuring reliable service delivery and efficient operations.
 
 ### Grafana
 
 - **Role**: Visualize and analyze telemetry data.
 - **Features**: Interactive dashboards, alerting, and extensive plugin support.
-- **Additional Information**: Grafana transforms the raw telemetry data collected by Prometheus into intuitive and interactive dashboards, making it easier for engineers to monitor and analyze network performance metrics. Its extensive plugin ecosystem allows for the integration of various data sources and the customization of visualizations to meet specific monitoring needs. Grafana's alerting features enable the creation of customized alerts based on predefined thresholds, ensuring that critical issues are promptly addressed. By providing clear and actionable visual insights, Grafana enhances the ability to maintain optimal network operations and quickly identify areas for improvement.
+
+**Grafana** is a widely-used open-source analytics and monitoring tool designed to visualize time-series data from various sources. It excels in creating interactive, customizable dashboards that allow users to track performance metrics, visualize trends, and generate reports in real-time. With extensive support for plugins, Grafana can integrate with multiple data sources like **Prometheus**, **Elasticsearch**, **Graphite**, and more. Its alerting functionality enables users to set thresholds and receive notifications when certain conditions are met, providing proactive monitoring and enabling quick responses to potential issues.
+
+In the **NaaS Automation Platform**, **Grafana** is used to visualize the metrics collected by **Prometheus**. Telemetry data such as network latency, bandwidth utilization, and device health are presented in intuitive, real-time dashboards, making it easy for engineers to monitor the health and performance of network infrastructure. Grafana's ability to support a wide range of visualizations—including graphs, heatmaps, and tables—ensures that all key metrics are easily interpretable, helping the platform maintain high levels of operational visibility and performance optimization. 
 
 ### PagerDuty
 
 - **Role**: Incident management and alerting.
 - **Features**: Real-time alerts, integration with monitoring tools, and automated incident resolution workflows.
-- **Additional Information**: PagerDuty serves as the central hub for managing and responding to network incidents within the NaaS platform. Its real-time alerting system ensures that engineers are immediately notified of any issues detected by monitoring tools like Prometheus and Grafana. By integrating seamlessly with these monitoring solutions, PagerDuty can automate incident workflows, escalating critical alerts to the appropriate personnel based on predefined rules and schedules. This automation reduces response times and ensures that incidents are addressed promptly, minimizing downtime and maintaining network reliability.
+
+**PagerDuty** is a leading platform for incident management that helps organizations detect, respond to, and resolve critical incidents in real-time. It integrates seamlessly with a wide range of monitoring tools like **Prometheus**, **Grafana**, and others, ensuring that alerts from various systems are aggregated and routed to the appropriate on-call teams. PagerDuty provides real-time notifications via multiple channels (SMS, email, phone, and mobile apps), allowing teams to respond to incidents quickly and efficiently. Its automation capabilities enable the creation of workflows to escalate issues and trigger automated responses based on pre-defined conditions, reducing downtime and improving operational resilience.
+
+Within the **NaaS Automation Platform**, **PagerDuty** is responsible for managing incidents and alerts related to network services. When telemetry data collected from monitoring tools like **Prometheus** or **Grafana** indicate an issue—such as service degradation or device failure—PagerDuty triggers real-time alerts to the appropriate network teams. By integrating with the platform’s monitoring systems, PagerDuty ensures that incidents are handled swiftly, preventing extended outages and maintaining service continuity. Automated incident resolution workflows also reduce the need for manual intervention, allowing for more efficient network management.
 
 ### HashiCorp Vault
 
 - **Role**: Manage secrets and SSL certificates.
 - **Features**: Secure storage, dynamic secrets, and data encryption.
-- **Additional Information**: HashiCorp Vault provides a secure solution for managing sensitive information such as secrets, API keys, and SSL certificates within the NaaS platform. Its robust security features ensure that confidential data is encrypted both at rest and in transit, protecting it from unauthorized access. Vault's dynamic secrets capabilities allow for the generation of temporary credentials, reducing the risk associated with long-lived secrets. Additionally, Vault integrates with various authentication mechanisms and supports automated secret rotation, enhancing the overall security posture of the network infrastructure.
+
+**HashiCorp Vault** is a robust tool for managing secrets, sensitive data, and encryption keys used by distributed systems. Vault offers secure storage for secrets, such as passwords, API keys, and SSL certificates, through policies and access control. It ensures that data is encrypted both at rest and in transit, providing high levels of security. Vault also supports dynamic secrets, which are generated on-demand and automatically expired after use, reducing the risk of compromised credentials. With extensive APIs and integrations, Vault can be integrated with automation pipelines, enabling secure, seamless management of credentials and certificates across infrastructure.
+
+In the **NaaS Automation Platform**, **HashiCorp Vault** is used to securely manage all passwords, secrets, and SSL certificates necessary for the operation of the platform. **Nautobot** and other components interact with Vault through its API to retrieve or store sensitive information, such as device login credentials and encryption keys, without exposing them directly in the configuration files. This integration enhances the security of the platform by ensuring that secrets are stored and accessed in a controlled, encrypted environment, reducing the attack surface and minimizing the risk of unauthorized access.
 
 ## Real-World Example: Network Fabric as a Service (NFaaS)
 
-To illustrate how these technologies come together, let’s explore a real-world example using the Network Fabric as a Service (NFaaS) solution. In this example, the NFaaS platform automates the entire process of fulfilling a compute service request through its CI/CD pipeline. Here’s a breakdown of the main steps in this pipeline:
+The **Network Fabric as a Service (NFaaS)** is one of the network service apps built on top of the **NaaS Automation Platform**. The NFaaS solution runs as a **Nautobot Plugin/App** within the NaaS platform, providing the automation logic necessary to deploy and manage spine/leaf data center fabrics. While NaaS is responsible for integrating various tools such as Nautobot, Cisco NSO, and others, NFaaS defines the automation processes and orchestrates workflows that automate the entire lifecycle of fabric management. This real-world example illustrates how NFaaS automates the process of fulfilling a compute service request through its CI/CD pipeline, leveraging the foundational capabilities of the NaaS platform.
 
 ### 1. Plan
 
-- **Define network changes and requirements**.
-- **Collaborate on design** using Jira and Confluence to document the High-Level Design (HLD) and Low-Level Design (LLD) for the compute request.
-- **Identify necessary network configurations and infrastructure** (spine/leaf fabric).
-
-**Process**:
-A client submits a compute service request through the Service Portal. Nautobot evaluates the request and determines that a new spine/leaf fabric is required to support the compute infrastructure. It calculates the necessary number of racks, servers, switches, and cabling, along with the power requirements. Once the service manager approves the request, Nautobot generates Jira tickets for the relevant teams (e.g., purchasing, facilities, and networking) to handle the required tasks, such as ordering equipment and scheduling rack installation.
+The process begins when a client submits an NFaaS compute service request through the Service Portal. The NFaaS App, built as a Nautobot plugin, evaluates the request and determines that a new spine/leaf fabric is needed to support the requested compute infrastructure. The NFaaS App then calculates the required number of racks, servers, switches, cabling, and power requirements. Once the service manager reviews and approves the request, the app automatically generates Jira tasks for the relevant teams—such as purchasing, facilities, and networking—to handle tasks like ordering equipment and scheduling rack installation.
 
 ### 2. Code
 
-- **Define configurations using IaC principles** in GitHub.
-- **Automate generation of configurations** for switches, VLANs, subnets, and IP addresses using predefined templates.
-- **Commit configurations to GitHub** for version control.
-
-**Process**:
-Network engineers utilize Infrastructure as Code (IaC) principles to automate the creation of network configurations. Nautobot leverages predefined templates to automatically generate configurations for spine and leaf switches, VLANs, subnets, and IP addresses. All configurations are then committed to GitHub, providing a version-controlled record that prepares the setup for the next phase.
+Network engineers use the NFaaS App to automatically generate the Low-Level Design (LLD) as YAML code. This LLD includes all configurations such as VLANs, IP prefixes, and address assignments, along with underlay and overlay network setups for the spine/leaf fabric. It also defines the rack layout, detailing the placement of servers and network devices, and specifies cabling requirements. Predefined templates are leveraged to ensure consistency in configurations. Once finalized, the YAML code representing the LLD is committed to GitHub, ensuring version control, traceability, and readiness for the CI/CD pipeline.
 
 ### 3. Build
 
-- **Trigger GitHub CI/CD processes** to initiate automated pipelines.
-- **Build the virtual testbed environment** for testing network changes.
-
-**Process**:
-Once the network configurations are committed to GitHub, automated pipelines are triggered to build the virtual testbed environment. This involves setting up simulated network infrastructures using tools like Cisco Modeling Labs (CML) and IxNetwork VE, ensuring that the environment accurately represents the live network. The virtual testbed environment is then ready for the subsequent testing phase.
+Once the Low-Level Design (LLD) is committed to GitHub, the CI/CD pipeline is automatically triggered. In this stage, the YAML files representing the LLD are processed to create a virtual testbed environment. Tools like Cisco Modeling Labs (CML) are employed to simulate the network topology, including the spine/leaf architecture and all specified configurations from the LLD, such as VLANs, IP prefixes, and cabling. This simulation mirrors the planned physical deployment, enabling a precise and controlled environment for validation. The virtual topology is used for subsequent testing, ensuring that the network design functions as expected before any real-world deployment.
 
 ### 4. Test
 
-- **Validate network changes in the virtual testbed** using Cisco Modeling Labs (CML) and IxNetwork VE.
-- **Ensure configurations meet service requirements** without impacting existing services using Cisco pyATS.
+With the virtual testbed in place, the **Test** phase begins to validate the network’s performance and correctness. The testbed simulates the production environment with accurate device and traffic patterns. **IxNetwork Virtual Edition (VE)** generates and tests network traffic flows to confirm routing and switching efficiency between devices.
 
-**Process**:
-In the test phase, the spine/leaf fabric is validated within the virtual environment before deployment. Utilizing Cisco Modeling Labs (CML), a virtual testbed simulates the new spine/leaf architecture, where network devices are interconnected, and traffic is routed between leaf and spine switches. IxNetwork VE appliances simulate compute traffic to ensure correct traffic flow and routing. Automated testing frameworks such as Cisco pyATS run comprehensive tests to validate connectivity, routing protocols (e.g., BGP or OSPF), and VLAN configurations. Only configurations that pass all tests are approved for release, ensuring that they meet the required standards and do not adversely affect existing services.
+Automated frameworks like **Cisco pyATS** perform comprehensive tests to ensure that all critical network functions—such as routing protocols and device connectivity—are working as expected. This reduces the risk of misconfigurations or disruptions, and only after passing all tests are the configurations approved for deployment.
 
 ### 5. Release
 
-- **Create and publish a new release** in the GitHub repository after passing all validation tests.
-- **Review, approve, and schedule deployment**.
+Once all tests have passed successfully, the next step is to package the validated configurations for deployment. In this Release phase, a new release is created in the GitHub repository. This release contains the approved configurations, ensuring they are version-controlled and ready for deployment.
 
-**Process**:
-Once the spine/leaf fabric configurations pass all validation tests, a new release is created and published in the GitHub repository. This release includes all validated configurations, such as switch settings, VLANs, subnets, and IP addresses for the fabric. The release is reviewed, approved, and scheduled by the control change committee, ensuring compliance with organizational standards. Once approved, the release is scheduled for deployment during a maintenance window.
+The release is reviewed and approved by the control change committee to ensure that the changes adhere to organizational policies and standards. Following the review, the release is scheduled for deployment during a maintenance window to minimize any potential impact on live services. Using version control in GitHub ensures traceability and accountability, with the option to revert changes if needed.
 
 ### 6. Deploy
 
-- **Deploy configurations to the physical network** using Nautobot and Cisco NSO.
-- **Allocate subnets and IP addresses**, and push necessary configurations via TFTP, DHCP, and DNS servers.
-- **Validate fabric’s performance and operational readiness** through automated tests.
+Once the release is scheduled, the NFaaS App automatically handles the deployment during the designated maintenance window. The deployment process begins by pulling the release from the GitHub repository, ensuring that the correct configurations are applied. The NFaaS App then executes a workflow that updates the Nautobot database with the latest configurations and prepares the necessary infrastructure services.
 
-**Process**:
-Nautobot and Cisco NSO work together to deploy the spine/leaf fabric in the physical network. Nautobot pulls the latest configurations from GitHub, updates its internal database, and generates the necessary device configurations based on validated templates. These configurations, which include the allocation of subnets and IP addresses, are then applied through integration with DHCP and DNS servers. Additionally, base configurations are uploaded to a TFTP server for zero-touch provisioning. Once the configurations are computed, Nautobot sends them to Cisco NSO via its northbound RESTCONF interface. Cisco NSO processes the configurations and distributes them to the respective network devices through its southbound APIs, such as NETCONF, RESTCONF, SNMP, and CLI. Post-deployment tests are automatically triggered to validate the fabric’s performance, ensuring proper spine-to-leaf connectivity, BGP neighbor relationships, and overall service readiness. This deployment process guarantees that the new fabric is seamlessly integrated into the broader infrastructure with consistency and without manual errors.
+As part of the deployment workflow, the app updates both the **DHCP** and **DNS** servers to ensure that new devices within the fabric receive the correct IP addresses and have the appropriate DNS entries. For zero-touch provisioning, the app generates base configurations for all spine and leaf devices, uploading these to a **TFTP server** so that the devices can be automatically configured upon boot.
+
+Simultaneously, the NFaaS App computes the detailed network configurations, such as routing protocols and interface settings, and sends them to **Cisco NSO**. NSO processes and pushes these configurations to the physical network devices via its southbound APIs. Once all devices are configured and operational, the NFaaS App updates the monitoring systems to ensure metrics are collected from the newly deployed fabric and alerts are set up for real-time performance monitoring and issue detection.
+
+This automated deployment process ensures a seamless and error-free integration of the new fabric into the existing network infrastructure.
 
 ### 7. Operate
 
-- **Begin real-time monitoring** using Prometheus and Grafana to track performance.
-- **Respond to issues** with alerts from PagerDuty.
-- **Ensure efficient operation** through continuous monitoring.
+Once the spine/leaf fabric is live, the NFaaS App initiates real-time monitoring of both the compute service and the underlying fabric. Prometheus and Grafana are leveraged to collect and visualize performance metrics such as latency, packet loss, and resource utilization across the spine and leaf switches. This continuous monitoring ensures that any anomalies are detected early, providing valuable insights into the overall health of the fabric.
 
-**Process**:
-Once the spine/leaf fabric is live, real-time monitoring of the compute service and underlying fabric is initiated using Prometheus and Grafana. These tools gather performance metrics such as latency, packet loss, and resource utilization on the spine and leaf switches. If any anomalies arise, PagerDuty alerts the relevant engineers for immediate action, ensuring that the fabric remains stable and meets the performance expectations.
+PagerDuty is integrated to send real-time alerts to engineers if any critical issues are detected, enabling fast resolution of performance bottlenecks or device malfunctions. Additionally, Grafana dashboards are accessible to field technicians, offering visibility into device statuses, such as faulty line cards and down connections due to missing or incorrect transceivers. The dashboards also display critical information about miswired cables, helping technicians quickly identify and rectify physical wiring issues that could affect network performance. This hands-on visibility ensures that any hardware or connection issues are promptly addressed, ensuring the fabric remains operational and performs as expected.
 
 ### 8. Monitor and Feedback
 
-- **Continuously monitor performance and stability**.
-- **Analyze telemetry data** via gNMIc and visualize insights with Grafana.
-- **Incorporate feedback** into the planning stage for adjustments and optimizations.
+Once the spine/leaf fabric is operational, continuous monitoring ensures its performance and stability by collecting real-time telemetry data from the fabric’s switches. Metrics like throughput, CPU utilization, and link health are visualized in Grafana to provide engineers with real-time insights and detect potential bottlenecks or degraded performance. This feedback is not only used to address immediate issues but also informs future planning cycles, driving continuous improvement.
 
-**Process**:
-After the spine/leaf fabric is deployed, continuous monitoring ensures that the network infrastructure operates smoothly. Telemetry data from gNMIc is collected from the fabric switches and analyzed using Grafana, providing insights into network performance, such as throughput, switch CPU usage, and link health. Any anomalies or performance optimizations are looped back into the planning phase for potential reconfiguration or scaling, ensuring the fabric continues to meet operational needs over time.
+Feedback loops play a crucial role in optimizing automation workflows, incorporating predictive analytics, and introducing dynamic scaling based on traffic patterns. By analyzing telemetry data, the platform can improve fault tolerance by adjusting failover procedures, enhancing service provisioning logic, or fine-tuning resource allocation. Additionally, feedback from operational data helps strengthen security protocols and detect vulnerabilities, ensuring the network remains resilient and adaptive to evolving operational needs.
 
 ## Conclusion
 
-The NaaS Automation Platform showcases the power of modern network automation, integrating open-source and commercial tools to transform how networks are managed across diverse environments, from enterprise to data centers, cloud, and service providers. By adopting NetDevOps practices and Infrastructure as Code (IaC) principles, the platform ensures that network services are not only provisioned with precision but also managed with efficiency and scalability. This reduces manual intervention, minimizes errors, and accelerates the deployment of services, making it ideal for dynamic and growing network environments.
-
-NaaS delivers continuous innovation by enabling real-time monitoring, proactive incident resolution, and seamless updates through its CI/CD pipeline, allowing organizations to stay ahead in today’s fast-evolving digital landscape. It enhances the agility of network operations, ensures scalability to meet future demands, and promotes consistency in configurations and compliance.
-
-Moreover, the NaaS Automation Platform offers a forward-looking framework that evolves with industry trends, accommodating new technologies, integrations, and automation techniques as they emerge. This forward-thinking approach positions NaaS as a vital solution for organizations striving for digital transformation, where operational efficiency, security, and scalability are critical to staying competitive.
-
-By automating the lifecycle of network operations, from provisioning to deployment and monitoring, NaaS enables network engineers to focus on strategic initiatives rather than routine tasks, fostering innovation and driving business outcomes. It is not just a solution to replace manual processes—it’s a platform designed to unlock the full potential of network automation in any modern IT ecosystem.
+The NaaS Automation Platform showcases the transformative power of network automation, integrating advanced tools and workflows to enhance scalability, reliability, and operational efficiency. By adopting NetDevOps practices and Infrastructure as Code (IaC), NaaS minimizes manual intervention and accelerates service delivery across various environments. With continuous innovation and real-time monitoring, it enables organizations to adapt swiftly to evolving demands, ensuring both seamless operations and future scalability. Ultimately, NaaS not only simplifies network management but unlocks the full potential of automation, driving strategic value in modern IT ecosystems.
 
 ### Glossary
 
