@@ -232,7 +232,7 @@ Network engineers use the NFaaS App to automatically generate the Low-Level Desi
 
 ### 3. Build
 
-Once the Low-Level Design (LLD) is committed to GitHub, the CI/CD pipeline is automatically triggered. In this stage, the YAML files representing the LLD are processed to create a virtual testbed environment. Tools like Cisco Modeling Labs (CML) are employed to simulate the network topology, including the spine/leaf architecture and all specified configurations from the LLD, such as VLANs, IP prefixes, and cabling. This simulation mirrors the planned physical deployment, enabling a precise and controlled environment for validation. The virtual topology is used for subsequent testing, ensuring that the network design functions as expected before any real-world deployment.
+Once the YAML files are committed to GitHub, the CI/CD pipeline is triggered to initiate the build process. These files are processed to set up a virtual testbed environment using tools like Cisco Modeling Labs (CML). The testbed mirrors the production network, enabling precise validation of the configurations and ensuring they meet the design specifications. This controlled environment allows engineers to safely test the network design before deployment to physical infrastructure.
 
 ### 4. Test
 
