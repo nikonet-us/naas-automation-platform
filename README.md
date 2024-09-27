@@ -224,21 +224,21 @@ The **Network Fabric as a Service (NFaaS)** is one of the network service apps b
 
 ### 1. Plan
 
-The process begins when a client submits an NFaaS compute service request through the Service Portal. The NFaaS App, built as a Nautobot plugin, evaluates the request and determines that a new spine/leaf fabric is needed to support the requested compute infrastructure. The NFaaS App then calculates the required number of racks, servers, switches, cabling, and power requirements. Once the service manager reviews and approves the request, the app automatically generates Jira tasks for the relevant teams—such as purchasing, facilities, and networking—to handle tasks like ordering equipment and scheduling rack installation.
+The process begins when a client submits an NFaaS compute service request through the Service Portal. The NFaaS Nautobot App evaluates the request and determines that a new spine/leaf fabric is needed to support the requested compute infrastructure. The app then calculates the required number of racks, servers, switches, cabling, and power requirements. Once the service manager reviews and approves the request, the app automatically generates Jira tasks for the relevant teams—such as purchasing, facilities, and networking—to handle tasks like ordering equipment and scheduling rack installation.
 
 ### 2. Code
 
-Network engineers use the NFaaS App to automatically generate the Low-Level Design (LLD) as YAML code. This LLD includes all configurations such as VLANs, IP prefixes, and address assignments, along with underlay and overlay network setups for the spine/leaf fabric. It also defines the rack layout, detailing the placement of servers and network devices, and specifies cabling requirements. Predefined templates are leveraged to ensure consistency in configurations. Once finalized, the YAML code representing the LLD is committed to GitHub, ensuring version control, traceability, and readiness for the CI/CD pipeline.
+Network engineers use the NFaaS App to automatically generate the Low-Level Design (LLD) as YAML code. This LLD includes all configurations such as VLANs, IP prefixes, and address assignments, along with underlay and overlay network setups for the spine/leaf fabric. It also defines the rack layout, detailing the placement of servers and network devices, and specifies cabling requirements. Predefined templates are leveraged to ensure consistency in configurations. Once finalized, the YAML code is committed to GitHub, ensuring version control, traceability, and readiness for the CI/CD pipeline.
 
 ### 3. Build
 
-Once the YAML files are committed to GitHub, the CI/CD pipeline is triggered to initiate the build process. These files are processed to set up a virtual testbed environment using tools like Cisco Modeling Labs (CML). The testbed mirrors the production network, enabling precise validation of the configurations and ensuring they meet the design specifications. This controlled environment allows engineers to safely test the network design before deployment to physical infrastructure.
+Once the YAML files are committed to GitHub, the CI/CD pipeline is triggered to initiate the build process. These files are processed to set up a virtual testbed environment using tools like **Cisco Modeling Labs (CML)**. The testbed mirrors the production network, enabling precise validation of the configurations and ensuring they meet the design specifications. This controlled environment allows engineers to safely test the network design before deployment to physical infrastructure.
 
 ### 4. Test
 
-With the virtual testbed in place, the **Test** phase begins to validate the network’s performance and correctness. The testbed simulates the production environment with accurate device and traffic patterns. **IxNetwork Virtual Edition (VE)** generates and tests network traffic flows to confirm routing and switching efficiency between devices.
+With the virtual testbed in place, the Test phase focuses on validating the network's configuration and traffic flows. The testbed simulates the production environment with accurate device setups and traffic patterns. **IxNetwork Virtual Edition (VE)** generates and tests network traffic flows to ensure proper routing and switching behavior between devices.
 
-Automated frameworks like **Cisco pyATS** perform comprehensive tests to ensure that all critical network functions—such as routing protocols and device connectivity—are working as expected. This reduces the risk of misconfigurations or disruptions, and only after passing all tests are the configurations approved for deployment.
+Automated frameworks like **Cisco pyATS** perform comprehensive tests to verify that all critical network functions—such as routing protocols and device connectivity—are working as expected. This process reduces the risk of misconfigurations or disruptions, and only after passing all tests are the configurations approved for deployment.
 
 ### 5. Release
 
@@ -248,11 +248,11 @@ The release is reviewed and approved by the control change committee to ensure t
 
 ### 6. Deploy
 
-Once the release is scheduled, the NFaaS App automatically handles the deployment during the designated maintenance window. The deployment process begins by pulling the release from the GitHub repository, ensuring that the correct configurations are applied. The NFaaS App then executes a workflow that updates the Nautobot database with the latest configurations and prepares the necessary infrastructure services.
+Once the release is scheduled, the NFaaS App automatically handles the deployment during the designated maintenance window. The deployment process begins by pulling the release from the GitHub repository, ensuring that the correct configurations are applied. The app then executes a workflow that updates the Nautobot database with the latest configurations and prepares the necessary infrastructure services.
 
 As part of the deployment workflow, the app updates both the **DHCP** and **DNS** servers to ensure that new devices within the fabric receive the correct IP addresses and have the appropriate DNS entries. For zero-touch provisioning, the app generates base configurations for all spine and leaf devices, uploading these to a **TFTP server** so that the devices can be automatically configured upon boot.
 
-Simultaneously, the NFaaS App computes the detailed network configurations, such as routing protocols and interface settings, and sends them to **Cisco NSO**. NSO processes and pushes these configurations to the physical network devices via its southbound APIs. Once all devices are configured and operational, the NFaaS App updates the monitoring systems to ensure metrics are collected from the newly deployed fabric and alerts are set up for real-time performance monitoring and issue detection.
+Simultaneously, the NFaaS App computes the detailed network configurations, such as routing protocols and interface settings, and sends them to **Cisco NSO**. NSO processes and pushes these configurations to the physical network devices via its southbound APIs. Once all devices are configured and operational, the app updates the monitoring systems to ensure metrics are collected from the newly deployed fabric and alerts are set up for real-time performance monitoring and issue detection.
 
 This automated deployment process ensures a seamless and error-free integration of the new fabric into the existing network infrastructure.
 
