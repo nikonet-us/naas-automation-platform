@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In today's rapidly evolving digital landscape, efficient network management is critical for maintaining scalable and resilient IT infrastructures. Traditional management methods, while providing control, often struggle to keep up with the complexity and speed required in modern environments. This presentation explores the challenges of classical network management and proposes the **Network as a Service (NaaS) Automation Platform** as a forward-thinking solution designed to address these issues. The NaaS Automation Platform offers a blueprint for automating and optimizing the full lifecycle of network services, ensuring scalability, consistency, and operational efficiency.
+In today's rapidly evolving digital landscape, efficient network management is critical for maintaining scalable and resilient IT infrastructures. Traditional management methods, while providing control, often struggle to keep up with the complexity and speed required in modern environments. This presentation explores the challenges of traditional network management and introduces the **Network as a Service (NaaS) Automation Platform** as a modern solution to address these challenges. The NaaS Automation Platform offers a blueprint for automating and optimizing the full lifecycle of network services, ensuring scalability, consistency, and operational efficiency.
 
 ## The Challenges of Classical Network Management
 
@@ -97,126 +97,98 @@ The NaaS Automation Platform integrates a suite of core technologies, each playi
 - **Role**: Store and manage network data, configurations, and inventory.
 - **Features**: Extensible data models, powerful APIs, and integration capabilities with various network automation tools.
 
-Nautobot is an open-source network automation platform designed to act as a **Source of Truth (SoT)** for network operations. It provides a centralized repository for all network-related data, such as device configurations, inventory, and topology data. Its flexible and extensible data models allow it to scale according to the needs of any organization. With robust APIs, Nautobot facilitates integration with other automation and orchestration tools, making it an essential component for modern network automation workflows.
-
-Within the NaaS Automation Platform, Nautobot plays a central role by collecting and maintaining all the necessary data to build network configurations. It integrates seamlessly with other tools in the platform to ensure that all network configurations are up-to-date, accurate, and ready for deployment. By acting as the platform's main data repository, Nautobot enables automated network configuration generation, provisioning, and management, supporting the platform’s goal of efficient and scalable network automation.
+Nautobot is an open-source network automation platform that serves as a **Source of Truth (SoT)** for managing network data, configurations, and inventory. It provides centralized control through its flexible data models and APIs, enabling integration with various automation tools. This ensures consistency and traceability across network operations while streamlining automation workflows in diverse environments.
 
 ### Cisco NSO
 
 - **Role**: Provision and manage network devices based on data provided by Nautobot.
 - **Features**: Model-driven service orchestration, multi-vendor support, and service lifecycle management.
 
-Cisco Network Services Orchestrator (NSO) is a powerful automation platform designed to provision and manage network devices across diverse network environments. NSO is built around a **model-driven** architecture, meaning it uses network models (YANG) to abstract device-specific details, making it possible to manage a wide range of vendors and technologies through a unified interface. NSO offers **multi-vendor support**, ensuring compatibility with different device types and technologies while also enabling **service lifecycle management**—from initial provisioning to updates and decommissioning. This allows for highly reliable, automated operations across a variety of network devices and platforms, reducing manual intervention and enhancing scalability.
-
-In the NaaS Automation Platform, Cisco NSO works closely with Nautobot to handle device-level configuration and provisioning. Nautobot pre-computes all the necessary device configurations and sends them to Cisco NSO over its **northbound RESTCONF API**. NSO then takes these configurations and distributes them to individual devices using its **Network Element Drivers (NEDs)**, which utilize **NETCONF, RESTCONF, SNMP, or CLI** to interface with the devices. This workflow ensures that all network configurations are deployed consistently and efficiently, leveraging Cisco NSO’s robust orchestration capabilities to manage complex, multi-vendor networks.
+Cisco Network Services Orchestrator (NSO) is a model-driven service orchestration platform designed for provisioning and managing multi-vendor network devices. NSO abstracts vendor-specific details using standard models like YANG, ensuring seamless and scalable automation across various technologies and environments. It provides end-to-end lifecycle management of services, from initial deployment to updates and decommissioning.
 
 ### Service Portal
 
 - **Role**: Customer-facing portal for requesting network services.
 - **Features**: Self-service interface, request tracking, and integration with automation processes.
 
-The **Service Portal** acts as the main interface for end-users to request network services in an automated and streamlined manner. It provides a self-service platform where users can submit service requests, monitor their status, and interact with the underlying network infrastructure without needing direct support from network engineers. The portal is built with intuitive user interaction features that simplify complex processes like network provisioning, ensuring ease of use for both technical and non-technical users.
-
-Within the **NaaS Automation Platform**, all service requests submitted through the Service Portal are forwarded to **Nautobot** for processing. Nautobot analyzes each request, assessing the required infrastructure resources—such as IP addresses, subnets, and devices—and determines what is available or needs to be provisioned. By automating the resource allocation and provisioning steps, the Service Portal ensures that services are efficiently deployed without manual intervention, speeding up delivery times and maintaining consistency across the network.
+The Service Portal acts as a user-friendly interface for end-users to request network services. It offers a self-service platform for submitting and tracking service requests, automating resource provisioning, and integrating with network management systems to speed up service delivery. The portal simplifies complex workflows, providing transparency and efficiency for both technical and non-technical users.
 
 ### Jira/Confluence
 
 - **Role**: Coordination, task tracking, and documentation for human-to-human interactions.
 - **Features**: Task management, issue tracking, cross-team collaboration, and centralized documentation.
 
-**Jira** and **Confluence** are essential tools for managing coordination and documentation within the NaaS Automation Platform. **Jira** facilitates task management, allowing teams to assign, track, and manage activities related to network service delivery. It ensures that all tasks are organized, deadlines are met, and dependencies are clear. Meanwhile, **Confluence** serves as the central repository for documentation, including High-Level Designs (HLDs), Low-Level Designs (LLDs), and all other resources related to network automation. It provides a collaborative environment where teams can document processes, share knowledge, and ensure that everyone involved in the network lifecycle has access to up-to-date information.
-
-In the **NaaS Automation Platform**, **Nautobot** integrates seamlessly with **Jira** to automate the creation of tasks based on service requests. For example, when a new service request is submitted through the **Service Portal**, Nautobot analyzes the request and automatically generates relevant tasks in **Jira** for different departments—such as purchasing, network engineering, and facilities—based on the infrastructure and service requirements. This automated task creation reduces the administrative burden on network teams and ensures that service requests are fulfilled in a timely and coordinated manner. 
+Jira and Confluence are collaborative tools that streamline task management and documentation. Jira enables task tracking, project management, and issue resolution, while Confluence serves as a centralized repository for documentation such as designs and automation workflows. Together, they enhance coordination and transparency across teams, ensuring efficient task execution and documentation sharing.
 
 ### Git/GitHub
 
 - **Role**: Provide version control and a collaborative development environment.
 - **Features**: Version control, pull requests, issue tracking, and integration with CI/CD pipelines.
 
-**Git** is a widely-used version control system that allows teams to collaborate on code and manage changes efficiently. Paired with **GitHub**, a cloud-based platform built on Git, it provides additional features such as pull requests, code reviews, issue tracking, and seamless integration with CI/CD pipelines. GitHub is a central hub for managing repositories, enabling teams to work on code simultaneously, track progress, and ensure that changes are deployed in a controlled and traceable manner. It allows engineers to collaborate effectively on network automation workflows, leveraging Git's branching and merging capabilities to maintain consistency and manage complex development cycles.
-
-Within the **NaaS Automation Platform**, **GitHub** plays a crucial role in storing the YAML files that represent network configurations and other automation instructions. **Nautobot** integrates directly with **GitHub** to pull these YAML files, ensuring that all configurations are version-controlled and traceable. When new changes are committed to the GitHub repository, **Nautobot** triggers the appropriate automation workflows to update network devices and services based on the latest configurations. This ensures that network updates are applied consistently, with a clear audit trail of changes, and that configuration management is fully automated across the NaaS platform.
+Git is a version control system that manages changes in code and configurations, while GitHub adds collaboration features like pull requests, issue tracking, and code reviews. By maintaining version-controlled repositories, GitHub facilitates teamwork, provides traceability, and ensures consistent, reliable updates across network automation workflows.
 
 ### kea-dhcp-server
 
 - **Role**: Provide DHCP services for network infrastructures.
 - **Features**: High performance, extensibility, and rich configuration options.
 
-**kea-dhcp-server** is an open-source, modern DHCP server developed by the Internet Systems Consortium (ISC). It is designed to provide high-performance, scalable, and flexible DHCP services for both IPv4 and IPv6 networks. The kea-dhcp-server supports dynamic IP address allocation, and its extensible architecture allows for custom hooks and configurations tailored to specific network environments. With its REST API, Kea is well-suited for integration with network automation systems, enabling real-time updates and dynamic configuration changes.
+Kea-DHCP is a high-performance, scalable DHCP server designed for dynamic IP address management. It supports both IPv4 and IPv6 networks and offers a modular architecture for customization. With REST API integration, it allows real-time updates to DHCP configurations, making it ideal for modern network infrastructures requiring dynamic resource allocation.
 
-In the **NaaS Automation Platform**, **Nautobot** pre-computes the DHCP configurations required for the network and automatically updates the **kea-dhcp-server** when necessary. When DHCP-related objects (such as subnets, leases, or pools) are modified in the platform, Nautobot updates the pre-computed DHCP configuration stored in its database. This configuration is then pushed to the kea-dhcp-server via its REST API, ensuring that the DHCP server always has the most up-to-date configuration without the need for manual intervention. This integration ensures seamless IP address management and reduces the risk of configuration errors across the network.
-
-   ### kea-dns-server
+### kea-dns-server
 
 - **Role**: Provide DNS services for dynamic registration of IP addresses and FQDNs.
 - **Features**: Automatic DNS registration, high scalability, and support for both IPv4 and IPv6 addressing schemes.
 
-The **kea-dns-server** is a high-performance, scalable DNS server designed to manage DNS name resolution dynamically. It automatically registers and updates DNS records, ensuring that devices on the network are assigned Fully Qualified Domain Names (FQDNs) that are easily discoverable. The server supports both IPv4 and IPv6, providing flexibility and extensibility through its modular architecture. Its ability to scale makes it suitable for networks of all sizes, where maintaining up-to-date DNS records is critical for efficient network operations.
-
-In the **NaaS Automation Platform**, **Nautobot** is responsible for managing and updating DNS records on the **kea-dns-server**. When changes occur in the network, such as new devices being added or IP addresses being reallocated, Nautobot automatically triggers the required updates to ensure that DNS records are accurate and reflect the current state of the network. By automating DNS updates, the platform reduces the need for manual intervention, ensuring that DNS resolution remains consistent and up-to-date.
+Kea-DNS is a high-performance, scalable DNS server that automatically manages the registration of IP addresses and Fully Qualified Domain Names (FQDNs). It provides real-time updates and dynamic DNS record management for both IPv4 and IPv6, ensuring accurate and consistent name resolution in fast-evolving network environments.
 
 ### Cisco Modeling Labs (CML)
 
 - **Role**: Validate network service changes in a virtual environment.
 - **Features**: Virtual network simulation, comprehensive device support, and integration with CI/CD pipelines.
 
-**Cisco Modeling Labs (CML)** is a powerful platform for network simulation and validation. It allows engineers to design, simulate, and test network configurations in a fully virtualized environment. CML supports a wide range of device types and network topologies, making it a versatile tool for creating realistic, scalable network simulations. With its ability to replicate production network environments, CML enables thorough testing and validation of network designs and configurations, ensuring that changes can be confidently rolled out without impacting live services. Its flexibility and device coverage make it an ideal solution for network engineers looking to validate complex, multi-vendor environments.
-
-Within the **NaaS Automation Platform**, **Cisco Modeling Labs (CML)** plays a key role in the testing and validation phase. Before network configuration changes are applied to the production environment, they are tested in a virtual network environment managed by CML. This ensures that all changes—such as device configurations, protocols, and connectivity—are thoroughly vetted in a controlled setting. By integrating with the CI/CD pipeline, CML allows automated deployment of test environments, which reduces the risk of errors and improves the overall reliability of network services. 
+Cisco Modeling Labs (CML) is a network simulation tool that allows for the design, testing, and validation of network configurations in a virtualized environment. CML supports a variety of network devices and topologies, enabling thorough validation of network changes before they are applied to production, reducing the risk of errors in complex environments. 
 
 ### IxNetwork Virtual Edition (VE)
 
 - **Role**: Test and validate network traffic flows.
 - **Features**: Comprehensive network testing, virtual and physical traffic validation, and scalability for production environments.
 
-**IxNetwork Virtual Edition (VE)** is a powerful network testing tool that simulates and validates network traffic flows in both virtual and physical environments. Developed by **Keysight Technologies**, IxNetwork VE offers an extensive set of features to test network performance, including the ability to generate high volumes of traffic, measure latency, and validate network functions. The platform supports a wide variety of network protocols, making it versatile for testing complex, multi-vendor networks. With the ability to scale across virtual environments, IxNetwork VE ensures that network configurations and services meet the required performance standards before being deployed in a production environment.
-
-Within the **NaaS Automation Platform**, **IxNetwork Virtual Edition (VE)** is integrated into both testing and production environments to generate and validate network traffic flows. During the testing phase, IxNetwork VE is used to simulate traffic across virtualized network topologies, ensuring that all network changes meet performance and connectivity standards. In production, it validates that the live network can handle real-world traffic patterns and loads. By automating the traffic validation process, IxNetwork VE helps ensure that the NaaS platform delivers high-quality, scalable network services without introducing performance bottlenecks or failures.
+IxNetwork VE is a network testing tool that simulates and validates network traffic flows in virtual and physical environments. It provides extensive protocol support and performance testing, ensuring that network configurations and services meet operational requirements. IxNetwork VE helps verify that network changes function correctly before deployment, reducing the risk of service disruptions.
    
 ### Cisco pyATS
 
 - **Role**: Validate network services.
 - **Features**: Automated testing, network device interactions, and comprehensive test coverage.
 
-**Cisco pyATS** is an advanced test automation framework that simplifies the validation of network services and configurations. pyATS allows engineers to automate network testing by providing extensive capabilities to interact with network devices, execute commands, and validate their behavior. The framework supports a wide variety of testing scenarios, from basic connectivity checks to complex multi-device interactions, ensuring that all elements of the network are functioning as expected. pyATS also integrates seamlessly with existing automation tools, making it easier to test and validate network changes in both virtual and physical environments.
-
-Within the **NaaS Automation Platform**, **Cisco pyATS** is used during the testing phase to validate network changes before they are applied to production environments. After configurations are deployed in a virtual testbed, pyATS executes automated tests to ensure that all network services—such as routing protocols, VLAN configurations, and device connectivity—are functioning correctly. By automating these validation processes, pyATS ensures that network changes are thoroughly tested and verified, reducing the risk of errors and ensuring high-quality deployments across the platform.
+Cisco pyATS is a test automation framework for validating network services. It allows for automated testing of network devices and configurations, ensuring that all network services, such as connectivity and protocol behaviors, work as expected. By automating testing, pyATS improves reliability and speeds up the validation process in both virtual and physical environments.
 
 ### gNMIc and Prometheus
 
 - **Role**: Collect and aggregate telemetry data.
 - **Features**: Real-time data collection, flexible querying, and alerting capabilities.
 
-**gNMIc** is a flexible open-source tool that provides support for **gRPC Network Management Interface (gNMI)**, a protocol used to collect real-time telemetry data from network devices. gNMIc allows engineers to subscribe to telemetry data streams, retrieve device state information, and analyze metrics that provide insight into the health and performance of network infrastructure. **Prometheus** is a powerful open-source monitoring system known for its flexible querying capabilities and real-time alerting. Prometheus collects time-series data from various sources, making it ideal for tracking metrics such as network latency, traffic, and resource utilization. Together, gNMIc and Prometheus enable comprehensive monitoring and visibility into network operations.
-
-In the **NaaS Automation Platform**, **gNMIc** is responsible for collecting telemetry data from network devices, while **Prometheus** stores and aggregates this data. Prometheus queries the data collected by gNMIc to monitor network performance and identify potential issues in real time. The telemetry data gathered includes critical metrics such as bandwidth usage, packet loss, and device health, which are essential for ensuring optimal network performance. By providing timely alerts and enabling detailed insights, gNMIc and Prometheus allow NaaS to maintain a proactive approach to network monitoring and troubleshooting, ensuring reliable service delivery and efficient operations.
+gNMIc is an open-source tool used to collect real-time telemetry data from network devices via the gNMI protocol. Paired with Prometheus, a robust monitoring system, it aggregates telemetry data, providing flexible querying and real-time alerting capabilities. Together, they offer comprehensive monitoring and visibility into network performance and health.
 
 ### Grafana
 
 - **Role**: Visualize and analyze telemetry data.
 - **Features**: Interactive dashboards, alerting, and extensive plugin support.
 
-**Grafana** is a widely-used open-source analytics and monitoring tool designed to visualize time-series data from various sources. It excels in creating interactive, customizable dashboards that allow users to track performance metrics, visualize trends, and generate reports in real-time. With extensive support for plugins, Grafana can integrate with multiple data sources like **Prometheus**, **Elasticsearch**, **Graphite**, and more. Its alerting functionality enables users to set thresholds and receive notifications when certain conditions are met, providing proactive monitoring and enabling quick responses to potential issues.
-
-In the **NaaS Automation Platform**, **Grafana** is used to visualize the metrics collected by **Prometheus**. Telemetry data such as network latency, bandwidth utilization, and device health are presented in intuitive, real-time dashboards, making it easy for engineers to monitor the health and performance of network infrastructure. Grafana's ability to support a wide range of visualizations—including graphs, heatmaps, and tables—ensures that all key metrics are easily interpretable, helping the platform maintain high levels of operational visibility and performance optimization. 
+Grafana is a popular open-source platform for visualizing time-series data from multiple sources. It offers interactive dashboards for monitoring performance metrics such as network health, resource utilization, and latency. With customizable alerting features, Grafana helps engineers quickly identify and address potential issues in network environments.
 
 ### PagerDuty
 
 - **Role**: Incident management and alerting.
 - **Features**: Real-time alerts, integration with monitoring tools, and automated incident resolution workflows.
 
-**PagerDuty** is a leading platform for incident management that helps organizations detect, respond to, and resolve critical incidents in real-time. It integrates seamlessly with a wide range of monitoring tools like **Prometheus**, **Grafana**, and others, ensuring that alerts from various systems are aggregated and routed to the appropriate on-call teams. PagerDuty provides real-time notifications via multiple channels (SMS, email, phone, and mobile apps), allowing teams to respond to incidents quickly and efficiently. Its automation capabilities enable the creation of workflows to escalate issues and trigger automated responses based on pre-defined conditions, reducing downtime and improving operational resilience.
-
-Within the **NaaS Automation Platform**, **PagerDuty** is responsible for managing incidents and alerts related to network services. When telemetry data collected from monitoring tools like **Prometheus** or **Grafana** indicate an issue—such as service degradation or device failure—PagerDuty triggers real-time alerts to the appropriate network teams. By integrating with the platform’s monitoring systems, PagerDuty ensures that incidents are handled swiftly, preventing extended outages and maintaining service continuity. Automated incident resolution workflows also reduce the need for manual intervention, allowing for more efficient network management.
+PagerDuty is an incident management platform that provides real-time alerts and automated incident response workflows. It integrates with monitoring tools to aggregate alerts and ensure rapid issue resolution. PagerDuty’s real-time notifications and escalation features enable teams to minimize downtime and maintain network reliability in critical environments.
 
 ### HashiCorp Vault
 
 - **Role**: Manage secrets and SSL certificates.
 - **Features**: Secure storage, dynamic secrets, and data encryption.
 
-**HashiCorp Vault** is a robust tool for managing secrets, sensitive data, and encryption keys used by distributed systems. Vault offers secure storage for secrets, such as passwords, API keys, and SSL certificates, through policies and access control. It ensures that data is encrypted both at rest and in transit, providing high levels of security. Vault also supports dynamic secrets, which are generated on-demand and automatically expired after use, reducing the risk of compromised credentials. With extensive APIs and integrations, Vault can be integrated with automation pipelines, enabling secure, seamless management of credentials and certificates across infrastructure.
-
-In the **NaaS Automation Platform**, **HashiCorp Vault** is used to securely manage all passwords, secrets, and SSL certificates necessary for the operation of the platform. **Nautobot** and other components interact with Vault through its API to retrieve or store sensitive information, such as device login credentials and encryption keys, without exposing them directly in the configuration files. This integration enhances the security of the platform by ensuring that secrets are stored and accessed in a controlled, encrypted environment, reducing the attack surface and minimizing the risk of unauthorized access.
+HashiCorp Vault is a secure tool for managing secrets, such as API keys, passwords, and encryption certificates. It provides secure storage, access control, and dynamic secrets generation, ensuring that sensitive information is encrypted and only accessible to authorized entities. Vault enhances security across distributed systems by simplifying secrets management and automating key processes.
 
 ## Real-World Example: Network Fabric as a Service (NFaaS)
 
