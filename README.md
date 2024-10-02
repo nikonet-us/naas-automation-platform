@@ -75,7 +75,7 @@ The NaaS Automation Platform follows a Continuous Integration and Continuous Del
 
 2. **Code**: Develop and configure network infrastructure using Infrastructure as Code (IaC) principles. Network configurations are written as code, ensuring they are version-controlled, traceable, and consistent across environments.
 
-3. **Build**: The CI/CD pipeline creates a virtual testing environment where the proposed network changes can be safely simulated. This environment mirrors the production network, allowing engineers to validate configurations without impacting live services.
+3. **Build**: The build process automatically generates the necessary configurations for all network devices and services. During this phase, the system compiles and prepares configurations for physical deployment, ensuring that all components are aligned with the defined design. These configurations are then set up for further validation and testing in the next phase.
 
 4. **Test**: In this phase, network configurations are tested within the virtual testbed. The goal is to ensure the changes meet performance standards, validate connectivity, and check for errors before deployment to the live network.
 
@@ -83,9 +83,9 @@ The NaaS Automation Platform follows a Continuous Integration and Continuous Del
 
 6. **Deploy**: The validated configurations are rolled out to the live network. The deployment is automated to ensure consistent and accurate application of the changes, with minimal manual intervention and disruption to existing services.
 
-7. **Operate**: Once deployed, the network’s performance is monitored in real-time. This phase ensures that the changes are functioning as expected, and any issues that arise are detected and addressed promptly.
+7. **Operate**: Once deployed, the network configurations and services are validated to ensure they are functioning as intended. This phase focuses on checking the stability of the deployment, identifying and resolving any potential issues related to configuration, hardware, or services, ensuring the network operates smoothly post-deployment.
 
-8. **Monitor and Feedback**: Continuous monitoring collects performance data and telemetry from the deployed configurations. This feedback is analyzed and used to inform future network changes, driving a continuous improvement loop for network operations.
+8. **Monitor and Feedback**: After deployment, network performance and stability are continuously monitored by collecting real-time telemetry data. This data provides insights into the health of the network and helps detect potential issues early. The feedback gathered from monitoring not only addresses immediate concerns but also informs future improvements, optimizing network operations through adjustments to automation workflows and system resources.
 
 
 ## NaaS Automation Platform Core Technologies and Their Roles
@@ -93,9 +93,9 @@ The NaaS Automation Platform follows a Continuous Integration and Continuous Del
 The NaaS Automation Platform integrates a suite of core technologies, each playing a pivotal role in the automation and management of network services:
 
 ### Nautobot
-
 - **Role**: Store and manage network data, configurations, and inventory.
 - **Features**: Extensible data models, powerful APIs, and integration capabilities with various network automation tools.
+- **Link**: [Nautobot](https://nautobot.readthedocs.io/)
 
 Nautobot is an open-source network automation platform that serves as a **Source of Truth (SoT)** for managing network data, configurations, and inventory. It provides centralized control through its flexible data models and APIs, enabling integration with various automation tools. This ensures consistency and traceability across network operations while streamlining automation workflows in diverse environments.
 
@@ -103,6 +103,7 @@ Nautobot is an open-source network automation platform that serves as a **Source
 
 - **Role**: Provision and manage network devices based on data provided by Nautobot.
 - **Features**: Model-driven service orchestration, multi-vendor support, and service lifecycle management.
+- **Link**: [Cisco NSO](https://www.cisco.com/c/en/us/products/cloud-systems-management/network-services-orchestrator/index.html)
 
 Cisco Network Services Orchestrator (NSO) is a model-driven service orchestration platform designed for provisioning and managing multi-vendor network devices. NSO abstracts vendor-specific details using standard models like YANG, ensuring seamless and scalable automation across various technologies and environments. It provides end-to-end lifecycle management of services, from initial deployment to updates and decommissioning.
 
@@ -117,6 +118,7 @@ The Service Portal acts as a user-friendly interface for end-users to request ne
 
 - **Role**: Coordination, task tracking, and documentation for human-to-human interactions.
 - **Features**: Task management, issue tracking, cross-team collaboration, and centralized documentation.
+- **Link**: [Jira](https://www.atlassian.com/software/jira) [Confluence](https://www.atlassian.com/software/confluence)
 
 Jira and Confluence are collaborative tools that streamline task management and documentation. Jira enables task tracking, project management, and issue resolution, while Confluence serves as a centralized repository for documentation such as designs and automation workflows. Together, they enhance coordination and transparency across teams, ensuring efficient task execution and documentation sharing.
 
@@ -124,6 +126,7 @@ Jira and Confluence are collaborative tools that streamline task management and 
 
 - **Role**: Provide version control and a collaborative development environment.
 - **Features**: Version control, pull requests, issue tracking, and integration with CI/CD pipelines.
+- **Link**: [Git](https://git-scm.com/) [GitHub](https://github.com/home)
 
 Git is a version control system that manages changes in code and configurations, while GitHub adds collaboration features like pull requests, issue tracking, and code reviews. By maintaining version-controlled repositories, GitHub facilitates teamwork, provides traceability, and ensures consistent, reliable updates across network automation workflows.
 
@@ -131,6 +134,7 @@ Git is a version control system that manages changes in code and configurations,
 
 - **Role**: Provide DHCP services for network infrastructures.
 - **Features**: High performance, extensibility, and rich configuration options.
+- **Link**: [Kea](https://www.isc.org/kea/)
 
 Kea-DHCP is a high-performance, scalable DHCP server designed for dynamic IP address management. It supports both IPv4 and IPv6 networks and offers a modular architecture for customization. With REST API integration, it allows real-time updates to DHCP configurations, making it ideal for modern network infrastructures requiring dynamic resource allocation.
 
@@ -138,6 +142,7 @@ Kea-DHCP is a high-performance, scalable DHCP server designed for dynamic IP add
 
 - **Role**: Provide DNS services for dynamic registration of IP addresses and FQDNs.
 - **Features**: Automatic DNS registration, high scalability, and support for both IPv4 and IPv6 addressing schemes.
+- **Link**: [Kea](https://www.isc.org/kea/)
 
 Kea-DNS is a high-performance, scalable DNS server that automatically manages the registration of IP addresses and Fully Qualified Domain Names (FQDNs). It provides real-time updates and dynamic DNS record management for both IPv4 and IPv6, ensuring accurate and consistent name resolution in fast-evolving network environments.
 
@@ -145,27 +150,31 @@ Kea-DNS is a high-performance, scalable DNS server that automatically manages th
 
 - **Role**: Validate network service changes in a virtual environment.
 - **Features**: Virtual network simulation, comprehensive device support, and integration with CI/CD pipelines.
+- **Link**: [Cisco Modeling Labs (CML)](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html)
 
-Cisco Modeling Labs (CML) is a network simulation tool that allows for the design, testing, and validation of network configurations in a virtualized environment. CML supports a variety of network devices and topologies, enabling thorough validation of network changes before they are applied to production, reducing the risk of errors in complex environments. 
+Cisco Modeling Labs (CML) is a network simulation tool that allows for the design, testing, and validation of network configurations in a virtualized environment. CML supports a variety of network devices and topologies, enabling thorough validation of network changes before they are applied to production, reducing the risk of errors in complex environments.
+
+### Cisco pyATS
+
+- **Role**: Validate network services.
+- **Features**: Automated testing, network device interactions, and comprehensive test coverage.
+- **Link**: [Cisco pyATS](https://developer.cisco.com/docs/pyats/)
+
+Cisco pyATS is a test automation framework for validating network services. It allows for automated testing of network devices and configurations, ensuring that all network services, such as connectivity and protocol behaviors, work as expected. By automating testing, pyATS improves reliability and speeds up the validation process in both virtual and physical environments. 
 
 ### IxNetwork Virtual Edition (VE)
 
 - **Role**: Test and validate network traffic flows.
 - **Features**: Comprehensive network testing, virtual and physical traffic validation, and scalability for production environments.
+- **Link**: [IxNetwork Virtual Edition (VE)](https://www.keysight.com/us/en/products/network-test/protocol-load-test/ixnetwork-ve.html)
 
 IxNetwork VE is a network testing tool that simulates and validates network traffic flows in virtual and physical environments. It provides extensive protocol support and performance testing, ensuring that network configurations and services meet operational requirements. IxNetwork VE helps verify that network changes function correctly before deployment, reducing the risk of service disruptions.
-   
-### Cisco pyATS
-
-- **Role**: Validate network services.
-- **Features**: Automated testing, network device interactions, and comprehensive test coverage.
-
-Cisco pyATS is a test automation framework for validating network services. It allows for automated testing of network devices and configurations, ensuring that all network services, such as connectivity and protocol behaviors, work as expected. By automating testing, pyATS improves reliability and speeds up the validation process in both virtual and physical environments.
 
 ### gNMIc and Prometheus
 
 - **Role**: Collect and aggregate telemetry data.
 - **Features**: Real-time data collection, flexible querying, and alerting capabilities.
+- **Link**: [gNMIc](https://gnmic.openconfig.net/) [Prometheus](https://prometheus.io/)
 
 gNMIc is an open-source tool used to collect real-time telemetry data from network devices via the gNMI protocol. Paired with Prometheus, a robust monitoring system, it aggregates telemetry data, providing flexible querying and real-time alerting capabilities. Together, they offer comprehensive monitoring and visibility into network performance and health.
 
@@ -173,6 +182,7 @@ gNMIc is an open-source tool used to collect real-time telemetry data from netwo
 
 - **Role**: Visualize and analyze telemetry data.
 - **Features**: Interactive dashboards, alerting, and extensive plugin support.
+- **Link**: [Grafana](https://grafana.com/)
 
 Grafana is a popular open-source platform for visualizing time-series data from multiple sources. It offers interactive dashboards for monitoring performance metrics such as network health, resource utilization, and latency. With customizable alerting features, Grafana helps engineers quickly identify and address potential issues in network environments.
 
@@ -180,6 +190,7 @@ Grafana is a popular open-source platform for visualizing time-series data from 
 
 - **Role**: Incident management and alerting.
 - **Features**: Real-time alerts, integration with monitoring tools, and automated incident resolution workflows.
+- **Link**: [PagerDuty](https://www.pagerduty.com/)
 
 PagerDuty is an incident management platform that provides real-time alerts and automated incident response workflows. It integrates with monitoring tools to aggregate alerts and ensure rapid issue resolution. PagerDuty’s real-time notifications and escalation features enable teams to minimize downtime and maintain network reliability in critical environments.
 
@@ -187,6 +198,7 @@ PagerDuty is an incident management platform that provides real-time alerts and 
 
 - **Role**: Manage secrets and SSL certificates.
 - **Features**: Secure storage, dynamic secrets, and data encryption.
+- **Link**: [HashiCorp Vault](https://www.vaultproject.io/)
 
 HashiCorp Vault is a secure tool for managing secrets, such as API keys, passwords, and encryption certificates. It provides secure storage, access control, and dynamic secrets generation, ensuring that sensitive information is encrypted and only accessible to authorized entities. Vault enhances security across distributed systems by simplifying secrets management and automating key processes.
 
@@ -255,15 +267,3 @@ Include a glossary to define key terms and acronyms used throughout the document
 - **HLD**: High-Level Design
 - **LLD**: Low-Level Design
 - **SoT**: Source of Truth
-
-### References and Further Reading
-
-- [Nautobot](https://nautobot.readthedocs.io/)
-- [Cisco Network Services Orchestrator (NSO)](https://www.cisco.com/c/en/us/products/cloud-systems-management/network-services-orchestrator/index.html)
-- [Cisco Modeling Labs (CML)](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html)
-- [Cisco pyATS](https://developer.cisco.com/docs/pyats/)
-- [IxNetwork Virtual Edition (VE)](https://www.keysight.com/us/en/products/network-test/protocol-load-test/ixnetwork-ve.html)
-- [Prometheus](https://prometheus.io/)
-- [Grafana](https://grafana.com/)
-- [PagerDuty](https://www.pagerduty.com/)
-- [HashiCorp Vault](https://www.vaultproject.io/)
