@@ -200,7 +200,7 @@ The process begins when a client submits an NFaaS compute service request throug
 
 ### 2. Code
 
-Once the NFaaS App has evaluated the request for the new spine/leaf fabric, it generates the **Low-Level Design (LLD)** in YAML format. This LLD includes all critical configurations needed to set up the spine/leaf fabric, such as **VLANs**, **IP prefixes**, and **address assignments**, along with the underlay and overlay network setups. It also defines the **rack layout**, specifying where servers and network devices will be placed, and the **cabling requirements** between the spine and leaf switches. Predefined templates within the NFaaS App ensure consistency across all configurations, reducing variability and maintaining uniform standards across the data center fabric. Once the YAML files are finalized, they are committed to **GitHub**, where version control tracks changes, allowing for rollback if necessary. This process also ensures the configurations are ready for the CI/CD pipeline.
+Network engineers use the NFaaS App to generate the Low-Level Design (LLD) in YAML format. Predefined service templates within the app are leveraged to generate all the necessary configurations for setting up the spine/leaf fabric, including VLANs, IP prefixes, and address assignments, along with underlay and overlay network setups. The LLD also defines the rack layout, specifying the placement of servers and network devices, as well as the cabling requirements between spine and leaf switches. Once the YAML files are finalized, they are committed to GitHub, where version control tracks changes and allows for rollbacks if necessary. This process ensures the configurations are prepared for the CI/CD pipeline.
 
 ### 3. Build
 
@@ -210,25 +210,27 @@ Finally, topology definitions for **Cisco Modeling Labs (CML)** are prepared, al
 
 ### 4. Test
 
-With the virtual testbed environment built using the CML topology definitions, the Test phase focuses on validating the network configurations and traffic flows. The testbed replicates the production environment, ensuring that all configurations—such as routing protocols and device interconnections—function as expected. IxNetwork Virtual Edition (VE) is utilized to simulate traffic flows, testing the behavior of the network and validating routing and switching operations between devices. Additionally, automated frameworks like Cisco pyATS are used to perform comprehensive tests, ensuring that all critical network functions—such as device connectivity and protocol correctness—are validated.
+With the virtual testbed environment built using the CML topology definitions, the Test phase focuses on validating all the configurations generated in the Build phase. These configurations are tested in the virtual environment to ensure they align with the design specifications. **Cisco pyATS** is used to automate the testing of the network configurations and services, performing comprehensive tests to validate key network functions such as device connectivity, protocol correctness, and the proper operation of routing protocols. Additionally, network services like **DHCP**, **DNS**, and **NTP** are also tested to ensure they are functioning correctly across the fabric.
+
+Following the pyATS validations, **IxNetwork Virtual Edition (VE)** is employed to simulate and test network traffic flows across the virtual fabric environment. This ensures that routing and switching operations between spine and leaf devices behave as expected.
 
 ### 5. Release
 
-Once all tests have passed successfully, the next step is to package the validated configurations for deployment. In this Release phase, a new release is created in the GitHub repository. This release contains the approved configurations, ensuring they are version-controlled and ready for deployment.
+Once all tests have passed successfully in the virtual spine/leaf fabric, the validated configurations are packaged into a new release. This release is committed to the GitHub repository, marking it as ready for the next phase.
 
-The release is reviewed and approved by the control change committee to ensure that the changes adhere to organizational policies and standards. Following the review, the release is scheduled for deployment during a maintenance window to minimize any potential impact on live services. Using version control in GitHub ensures traceability and accountability, with the option to revert changes if needed.
+Before proceeding, the release undergoes a review by the control change committee to ensure compliance with organizational standards and policies. It is then scheduled for implementation during a designated maintenance window, minimizing any potential impact on live services while maintaining accountability and control throughout the process.
 
 ### 6. Deploy
 
-Once the release is scheduled, the NFaaS App initiates the deployment process during the designated maintenance window by pulling the release with configuration files. The app automatically updates the **Nautobot database** to reflect the latest network state, orchestrates the provisioning of **DHCP** and **DNS** servers, and finaly updates **NSO** with device configurations. It also enables the monitoring systems to ensure real-time performance metrics are tracked and alerts are configured for any potential issues. In the event of any issues, the app can trigger a rollback, reverting the fabric to the previous stable configuration to minimize disruption.
+Once the release is scheduled, the NFaaS App initiates the deployment process during the designated maintenance window. The app pulls the release and applies the configurations to ensure the spine/leaf fabric is correctly provisioned. It updates the Nautobot database to reflect the latest network state and coordinates the execution of workflows that push the prepared configurations to all network devices and services, while also enabling monitoring systems.
+
+In the event of any issues during deployment, the app can trigger an automatic rollback, restoring the network to the last stable configuration. This rollback capability minimizes service disruption, ensuring a seamless recovery process if any errors or inconsistencies are detected.
 
 ### 7. Operate
 
-After the fabric is live, the **NFaaS App** facilitates real-time monitoring of the spine/leaf architecture through integration with **Prometheus** and **Grafana**. Network engineers and field technicians can use **Grafana dashboards** to validate several aspects of the deployment, ensuring the infrastructure functions as expected.
+After the spine/leaf fabric is live, field technicians can use Grafana dashboards to monitor and validate the physical infrastructure of the fabric. These dashboards provide real-time insights into key hardware metrics such as link health, device connectivity, and resource utilization. Technicians can quickly identify issues like miswired cables, down interfaces, or hardware failures, including faulty linecards, transceivers, fan malfunctions, and power supply unit (PSU) issues. By analyzing metrics technicians can troubleshoot and resolve potential physical issues that might disrupt network performance.
 
-The dashboards provide visibility into key metrics such as **link health**, **resource utilization**, and **device connectivity**. For example, engineers can validate the operational status of **network interfaces**, check for **down connections**, or identify **miswired cables** between spine and leaf devices. Additionally, the dashboards offer insight into hardware status, such as **down linecards**, **device fan malfunctions**, and **power supply unit (PSU) issues**. By monitoring **fan speeds**, **power consumption**, and **temperature fluctuations**, the dashboards help technicians identify and troubleshoot potential hardware failures that could disrupt network performance.
-
-Grafana also displays data on **latency**, **packet loss**, and **transceiver health**, helping technicians diagnose issues such as **low light levels** or faulty optics. It provides insight into **routing tables** and **BGP/OSPF neighbors**, ensuring all devices are properly interconnected and protocols are functioning as expected. These insights allow engineers to perform post-deployment checks and make real-time adjustments where necessary.
+Network engineers leverage NFaaS validation workflows to ensure that the logical configurations and services deployed on the fabric are functioning as expected. Engineers validate critical fabric services, such as OSPF, BGP, DHCP, DNS, and NTP, ensuring that these services are operating correctly across the fabric.
 
 ### 8. Monitor and Feedback
 
