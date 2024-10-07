@@ -222,7 +222,7 @@ Finally, topology definitions for **Cisco Modeling Labs (CML)** are prepared, al
 
 ### 4. Test
 
-With the virtual testbed environment built using the CML topology definitions, the Test phase focuses on validating all the configurations generated in the Build phase. These configurations are tested in the virtual environment to ensure they align with the design specifications. **Cisco pyATS** is used to automate the testing of the network configurations and services, performing comprehensive tests to validate key network functions such as device connectivity, protocol correctness, and the proper operation of routing protocols. Additionally, network services like **DHCP**, **DNS**, and **NTP** are also tested to ensure they are functioning correctly across the fabric.
+With the virtual testbed environment built using the CML topology definitions, the Test phase focuses on validating all the configurations generated in the Build phase. These configurations are tested to ensure they align with the design specifications. **Cisco pyATS** is used to automate the testing of the network configurations and services, performing comprehensive tests to validate key network functions such as device connectivity, protocol correctness, and the proper operation of routing protocols. Additionally, network services like **DHCP**, **DNS**, and **NTP** are also tested to ensure they are functioning correctly across the fabric.
 
 Following the pyATS validations, **IxNetwork Virtual Edition (VE)** is employed to simulate and test network traffic flows across the virtual fabric environment. This ensures that routing and switching operations between spine and leaf devices behave as expected.
 
