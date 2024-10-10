@@ -835,12 +835,13 @@ connections:
 In this demonstration, we will show how the NFaaS App integrates with Nautobot to pull inventory files from repositories, process them by updating the Nautobot database, and deploy network configurations using Cisco NSO. Starting from a clean Nautobot database, this demo will guide you through configuring the NFaaS App and managing the network inventory to complete the deployment process. The following steps will guide you through the demo:
 
 1. **Configure NFaaS App**: Set up the NFaaS App by providing essential configuration details, such as the GitHub organization URL, NFaaS inventory repository, and GitHub API token. This ensures the app can access and manage the necessary resources.
-2. **Load Inventory**: Populate Nautobot with network inventory from the defined GitHub repository, using the NFaaS App to bring in devices, roles, locations, and configurations.
-3. **Add a New Fabric**: Define a new fabric, detailing the spine/leaf setup and generating a corresponding YAML-based Low-Level Design (LLD).
+2. **Load Inventory**: Populate Nautobot with network inventory from the defined GitHub repository, using the NFaaS App to bring in device types, their roles, locations, etc. For more details on the repository, check the [NFaaS Nautobot Inventory GitHub repository](https://github.com/nikonet-us/nfaas-nautobot-inventory).
+3. **Add New Fabric**: Use the NFaaS App Nautobot Jobs to import a fabric's configuration from the GitHub repository. The NFaaS App will pull the necessary YAML files, apply the fabric details to update Nautobot, and deploy the configurations.
 4. **Update the Fabric**: Modify the configuration of an existing fabric, such as enabling additional links or changing the VLAN setup, and redeploy the updated design.
 5. **Delete the Fabric**: Finally, remove the fabric from Nautobot, demonstrating the full lifecycle management of a network fabric using the NFaaS App.
 
-#### Starting with a Clean Nautobot Database
+#### **Starting with a Clean Nautobot Database**
+
 ![Starting with a clean Nautobot database](screenshots/nautobot_clean.png)
 
 This screenshot illustrates the initial state of Nautobot, with a clean database and NFaaS App installed.
@@ -849,17 +850,48 @@ This screenshot illustrates the initial state of Nautobot, with a clean database
 
 To configure the NFaaS App, follow these steps to navigate through the settings and provide the necessary information:
 
-1. **Navigate to Settings**:  
+1. **Navigate to Settings**  
    To update the NFaaS App settings, navigate to **Apps > NFaaS > Settings** within Nautobot. The screenshot below shows the starting point for configuration:  
    ![Clean NFaaS Settings](screenshots/nfaas_settings_clean.png)
 
-2. **Edit Settings**:  
-   Click the **Edit** button to begin updating the NFaaS settings. This action allows you to provide essential configuration details, such as the GitHub organization URL, NFaaS inventory repository, and GitHub API token:  
+2. **Edit Settings**  
+   Click the **Edit** button to begin updating the NFaaS settings. This action allows you to provide essential configuration details:  
    ![Edit NFaaS Settings](screenshots/nfaas_settings_edit.png)
 
-3. **Update Information**:  
+3. **Update Information**  
    Populate the fields with the required information and click **Update** to save the configuration changes:  
    ![Update NFaaS Settings](screenshots/nfaas_settings.png)
+
+#### **Load Inventory**
+
+To load the inventory data into Nautobot, follow these steps to use the NFaaS App for pulling the inventory information from GitHub and updating the Nautobot database:
+
+1. **Navigate to Update Inventory Job**  
+   Navigate to **Jobs > Jobs** and click **Update Inventory**:  
+   ![NFaaS Jobs](screenshots/nfaas_jobs.png)
+
+2. **Run Update Inventory Job**  
+   Select an inventory GitHub release from the **Release** dropdown and click **Run Job Now** to initiate the job.
+
+   ![Update Inventory Job](screenshots/nfaas_update_inventory.png)
+
+   Nautobot starts the job and provides logs for monitoring progress.
+
+   ![Update Inventory Started](screenshots/nfaas_update_inventory_started.png)
+
+   Once completed, the inventory is successfully loaded.
+
+   ![Update Inventory Completed](screenshots/nfaas_update_inventory_completed.png)
+
+3. **View Added Locations**  
+   Navigate to **Organization > Locations** to verify the locations that were added during the inventory update:  
+   ![Locations in Nautobot](screenshots/nautobot_locations.png)
+
+4. **View Added Device Types**  
+   Navigate to **Devices > Device Types** to verify the imported device types:  
+   ![Device Types in Nautobot](screenshots/nautobot_device_types.png)
+
+These steps cover how to load the inventory into Nautobot using the NFaaS App, ensuring the data from GitHub is successfully imported and visible in the system. 
 
 ## Conclusion
 
