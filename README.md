@@ -87,7 +87,6 @@ The NaaS Automation Platform follows a Continuous Integration and Continuous Del
 
 8. **Monitor and Feedback**: After deployment, network performance and stability are continuously monitored by collecting real-time telemetry data. This data provides insights into the health of the network and helps detect potential issues early. The feedback gathered from monitoring not only addresses immediate concerns but also informs future improvements, optimizing network operations through adjustments to automation workflows and system resources.
 
-
 ## NaaS Automation Platform Core Technologies and Their Roles
 
 The NaaS Automation Platform integrates a suite of core technologies, each playing a pivotal role in the automation and management of network services:
@@ -249,6 +248,597 @@ Network engineers leverage NFaaS validation workflows to ensure that the logical
 Once the spine/leaf fabric is operational, continuous monitoring ensures its performance and stability by collecting real-time telemetry data from the fabric’s switches. Metrics like throughput, CPU utilization, and link health are visualized in Grafana to provide engineers with real-time insights and detect potential bottlenecks or degraded performance. **PagerDuty** is integrated to send real-time alerts to engineers if any critical issues, such as hardware failures or significant performance drops, are detected, enabling immediate responses and ensuring that the network remains operational.
 
 This feedback is not only used to address immediate issues but also informs future planning cycles, driving continuous improvement. Feedback loops play a crucial role in optimizing automation workflows, incorporating predictive analytics, and introducing dynamic scaling based on traffic patterns. By analyzing telemetry data, the platform can improve fault tolerance by adjusting failover procedures, enhancing service provisioning logic, or fine-tuning resource allocation. Additionally, feedback from operational data helps strengthen security protocols and detect vulnerabilities, ensuring the network remains resilient and adaptive to evolving operational needs.
+
+## **Proof of Concept Demo**
+
+In this demo, we showcase how the NFaaS App can be used to design, translate, and deploy a small spine/leaf fabric. This process will walk through defining a high-level design (HLD) template, converting it into a low-level design (LLD) using YAML, and deploying the LLD within the NFaaS App. This demo highlights the translation of an HLD template into a deployable configuration and demonstrates how the NFaaS App manages deployment and automation through a series of structured steps. The HLD template provides a reusable spine/leaf design framework, enabling customization for specific deployment needs within the NFaaS platform.
+
+### High-Level Design
+
+#### Device Roles and Models
+- **Spine Devices**:
+  - Two spine switches (SPN00 and SPN01), both Cisco Nexus 9364C-GX models.
+  - Each spine has loopback and management IPs, as well as multiple physical Ethernet interfaces.
+  - Spine switches connect to each leaf switch through multiple port-channels (LAGs), providing redundant uplinks.
+
+- **Leaf Devices**:
+  - Four leaf switches (DLF00, DLF01, DLF02, and DLF03), all Cisco Nexus 93108TC-EX models.
+  - Each leaf switch is equipped with loopback and management IPs and connects to the spine switches via physical interfaces aggregated into port-channels for redundancy.
+
+#### Network Architecture and IP Addressing
+- **Management Network**:
+  - Management IP addresses are assigned within a **/24** subnet for the management interfaces (mgmt0) on all devices, ensuring secure, isolated management traffic.
+- **Fabric Network**:
+  - A **/20** network is assigned to the fabric and then subdivided into subnets for different functions, such as loopback0 interfaces used for router-ids, with each switch assigned a unique /32 address within a dedicated loopback range.
+
+#### Port Channels and Physical Connectivity
+- **Port Channels**:
+  - Port-channels are pre-configured between each spine and leaf pair but are initially set to **disabled**.
+  - Each spine switch has four port-channels (po101-po104 on SPN00 and po201-po204 on SPN01), each consisting of two physical interfaces that connect to the corresponding ports on the leaf switches. 
+  - Each leaf switch has uplink port-channels to the spines, allowing for active/active or active/standby configurations as needed.
+  
+#### VLAN and Routing
+- **VLAN Configuration**:
+  - A single VLAN (VLAN 1) is designated as the **default VLAN** across the fabric, supporting basic L2 connectivity.
+- **Routing**:
+  - The spine switches are configured to support L3 connectivity and routing between the leaf devices.
+  - During initial deployment, all port-channels are disabled. In a subsequent release, the port-channels are enabled, allowing full routing and redundancy across the fabric.
+
+#### Release Phases
+The deployment is planned in two release phases:
+1. **Initial Release**: The full configuration is deployed with port-channels set to **disabled**, allowing for initial network setup and connectivity validation.
+2. **Second Release**: Port-channels are activated to provide **redundant uplinks** and complete the fabric’s spine/leaf architecture.
+
+This HLD template provides a foundation for converting the setup into a YAML-based Low-Level Design (LLD) that details each element’s specific configurations and prepares it for deployment using the NFaaS platform.
+
+### Low-Level Design
+
+In the NFaaS App, only four main parameters—Site, Data Center, Building, and Fabric Size—are required to generate the YAML code for the Low-Level Design (LLD). The app uses these inputs to dynamically create the detailed LLD configurations needed for fabric deployment. The tables below serve as a visual aid to represent this information, breaking down the essential elements such as VLANs, IP prefixes, and device configurations. This allows for a clearer understanding of the configuration elements that will be converted into a YAML file for deployment.
+
+#### **Fabric Details**
+
+| Parameter        | Value        |
+|------------------|--------------|
+| **Site**         | EWR00        |
+| **Data Center**  | Equinix      |
+| **Building**     | NY1          |
+| **Fabric Size**  | Small        |
+| Fabric ID        | FAB00        |
+| Name             | FAB00.EWR00  |
+
+#### **VLANs**
+
+| VLAN ID (vid) | Name    |
+|---------------|---------|
+| 1             | Default |
+
+#### **IP Prefixes**
+
+| Prefix           | Type       | Role                              |
+|------------------|------------|-----------------------------------|
+| 192.168.2.0/24   | network    | FABRIC::MGMT                      |
+| 10.0.0.0/20      | container  | FABRIC                            |
+| 10.0.0.0/24      | container  | FABRIC::LOOPBACK0                 |
+| 10.0.0.0/28      | container  | FABRIC::LOOPBACK0::SPN            |
+| 10.0.0.16/28     | container  | FABRIC::LOOPBACK0::DLF            |
+| 10.0.0.0/32      | network    | FABRIC::LOOPBACK0::ROUTER_ID      |
+| 10.0.0.1/32      | network    | FABRIC::LOOPBACK0::ROUTER_ID      |
+| 10.0.0.16/32     | network    | FABRIC::LOOPBACK0::ROUTER_ID      |
+| 10.0.0.17/32     | network    | FABRIC::LOOPBACK0::ROUTER_ID      |
+| 10.0.0.18/32     | network    | FABRIC::LOOPBACK0::ROUTER_ID      |
+| 10.0.0.19/32     | network    | FABRIC::LOOPBACK0::ROUTER_ID      |
+
+#### **Devices**
+
+| Device Name          | Model       | Role | NSO NED ID     | mgmt0 IP (DHCP) 	| Lo0 IP       |
+|----------------------|-------------|------|----------------|------------------|--------------|
+| SPN00.FAB00.EWR00    | 9364C-GX    | SPN  | NX-OS-nc-10.3  | 192.168.2.101/24 | 10.0.0.0/32  |
+| SPN01.FAB00.EWR00    | 9364C-GX    | SPN  | NX-OS-nc-10.3  | 192.168.2.102/24 | 10.0.0.1/32  |
+| DLF00.FAB00.EWR00    | 93108TC-EX  | DLF  | NX-OS-nc-10.3  | 192.168.2.103/24 | 10.0.0.16/32 |
+| DLF01.FAB00.EWR00    | 93108TC-EX  | DLF  | NX-OS-nc-10.3  | 192.168.2.104/24 | 10.0.0.17/32 |
+| DLF02.FAB00.EWR00    | 93108TC-EX  | DLF  | NX-OS-nc-10.3  | 192.168.2.105/24 | 10.0.0.18/32 |
+| DLF03.FAB00.EWR00    | 93108TC-EX  | DLF  | NX-OS-nc-10.3  | 192.168.2.106/24 | 10.0.0.19/32 |
+
+#### **Interface Roles and Configurations**
+
+##### **Spine Switches (SPN00 & SPN01)**
+
+| Interfaces       | Role     | Status | Enabled | MTU  | VLAN |
+|------------------|----------|--------|---------|------|------|
+| mgmt0            | N/A      | Active | Yes     | 1500 | N/A  |
+| lo0              | N/A      | Active | Yes     | 1500 | N/A  |
+| poXXX            | N/A      | Active | Yes     | 9216 | N/A  |
+| eth1/1 - eth1/8  | Downlink | Active | Yes     | 9216 | N/A  |
+| eth1/9 - eth1/64 | N/A      | Unused | No      | 1500 | 1    |
+
+##### **Leaf Switches (DLF00 - DLF03)**
+
+| Interfaces       | Role     | Status | Enabled | MTU  | VLAN |
+|------------------|----------|--------|---------|------|------|
+| mgmt0            | N/A      | Active | Yes     | 1500 | N/A  |
+| lo0              | N/A      | Active | Yes     | 1500 | N/A  |
+| poXXX            | N/A      | Active | Yes     | 9216 | N/A  |
+| eth1/1 - eth1/4  | Uplink   | Active | Yes     | 9216 | N/A  |
+| eth1/5 - eth1/54 | N/A      | Unused | No      | 1500 | 1    |
+
+#### **Port-Channels and Member Interfaces**
+
+##### **SPN00.FAB00.EWR00**
+
+| Port-Channel | Member Interfaces   | Connected Leaf Switch |
+|--------------|---------------------|-----------------------|
+| **po101**    | eth1/1, eth1/2      | DLF00.FAB00.EWR00     |
+| **po102**    | eth1/3, eth1/4      | DLF01.FAB00.EWR00     |
+| **po103**    | eth1/5, eth1/6      | DLF02.FAB00.EWR00     |
+| **po104**    | eth1/7, eth1/8      | DLF03.FAB00.EWR00     |
+
+##### **SPN01.FAB00.EWR00**
+
+| Port-Channel | Member Interfaces   | Connected Leaf Switch |
+|--------------|---------------------|-----------------------|
+| **po201**    | eth1/1, eth1/2      | DLF00.FAB00.EWR00     |
+| **po202**    | eth1/3, eth1/4      | DLF01.FAB00.EWR00     |
+| **po203**    | eth1/5, eth1/6      | DLF02.FAB00.EWR00     |
+| **po204**    | eth1/7, eth1/8      | DLF03.FAB00.EWR00     |
+
+##### **DLF00.FAB00.EWR00**
+
+| Port-Channel | Member Interfaces   | Connected Spine Switch |
+|--------------|---------------------|------------------------|
+| **po101**    | eth1/1, eth1/2      | SPN00.FAB00.EWR00      |
+| **po201**    | eth1/3, eth1/4      | SPN01.FAB00.EWR00      |
+
+##### **DLF01.FAB00.EWR00**
+
+| Port-Channel | Member Interfaces   | Connected Spine Switch |
+|--------------|---------------------|------------------------|
+| **po102**    | eth1/1, eth1/2      | SPN00.FAB00.EWR00      |
+| **po202**    | eth1/3, eth1/4      | SPN01.FAB00.EWR00      |
+
+##### **DLF02.FAB00.EWR00**
+
+| Port-Channel | Member Interfaces   | Connected Spine Switch |
+|--------------|---------------------|------------------------|
+| **po103**    | eth1/1, eth1/2      | SPN00.FAB00.EWR00      |
+| **po203**    | eth1/3, eth1/4      | SPN01.FAB00.EWR00      |
+
+##### **DLF03.FAB00.EWR00**
+
+| Port-Channel | Member Interfaces   | Connected Spine Switch |
+|--------------|---------------------|------------------------|
+| **po104**    | eth1/1, eth1/2      | SPN00.FAB00.EWR00      |
+| **po204**    | eth1/3, eth1/4      | SPN01.FAB00.EWR00      |
+
+##### **Connections Between Devices**
+
+| A Device               | A Interface | B Device               | B Interface |
+|------------------------|-------------|------------------------|-------------|
+| SPN00.FAB00.EWR00      | eth1/1      | DLF00.FAB00.EWR00      | eth1/1      |
+| SPN00.FAB00.EWR00      | eth1/2      | DLF00.FAB00.EWR00      | eth1/2      |
+| SPN00.FAB00.EWR00      | eth1/3      | DLF01.FAB00.EWR00      | eth1/1      |
+| SPN00.FAB00.EWR00      | eth1/4      | DLF01.FAB00.EWR00      | eth1/2      |
+| SPN00.FAB00.EWR00      | eth1/5      | DLF02.FAB00.EWR00      | eth1/1      |
+| SPN00.FAB00.EWR00      | eth1/6      | DLF02.FAB00.EWR00      | eth1/2      |
+| SPN00.FAB00.EWR00      | eth1/7      | DLF03.FAB00.EWR00      | eth1/1      |
+| SPN00.FAB00.EWR00      | eth1/8      | DLF03.FAB00.EWR00      | eth1/2      |
+| SPN01.FAB00.EWR00      | eth1/1      | DLF00.FAB00.EWR00      | eth1/3      |
+| SPN01.FAB00.EWR00      | eth1/2      | DLF00.FAB00.EWR00      | eth1/4      |
+| SPN01.FAB00.EWR00      | eth1/3      | DLF01.FAB00.EWR00      | eth1/3      |
+| SPN01.FAB00.EWR00      | eth1/4      | DLF01.FAB00.EWR00      | eth1/4      |
+| SPN01.FAB00.EWR00      | eth1/5      | DLF02.FAB00.EWR00      | eth1/3      |
+| SPN01.FAB00.EWR00      | eth1/6      | DLF02.FAB00.EWR00      | eth1/4      |
+| SPN01.FAB00.EWR00      | eth1/7      | DLF03.FAB00.EWR00      | eth1/3      |
+| SPN01.FAB00.EWR00      | eth1/8      | DLF03.FAB00.EWR00      | eth1/4      |
+
+<details>
+  <summary>Click here to view the YAML LLD file</summary>
+
+```yaml
+# Fabric Details
+name: FAB00.EWR00  # Fabric ID and Name for reference
+data_center: Equinix  # Specifies the Data Center
+site: EWR00  # Site code for the location within the Data Center
+building: NY1  # Physical location within the data center
+fabric_id: FAB00  # Unique identifier for this fabric
+fabric_size: small  # Indicates the fabric size category
+
+# VLAN Configuration
+vlans:
+  - vid: 1
+    name: Default  # VLAN ID and Name
+
+# IP Prefixes for the network architecture
+prefixes:
+  - prefix: 192.168.2.0/24
+    type: network
+    role: FABRIC::MGMT  # Management network for the devices
+  - prefix: 10.0.0.0/20
+    type: container
+    role: FABRIC  # Container for all fabric-related IP ranges
+  - prefix: 10.0.0.0/24
+    type: container
+    role: FABRIC::LOOPBACK0  # Container for loopback IPs across devices
+  - prefix: 10.0.0.0/28
+    type: container
+    role: FABRIC::LOOPBACK0::SPN  # Loopback range for Spine devices
+  - prefix: 10.0.0.16/28
+    type: container
+    role: FABRIC::LOOPBACK0::DLF  # Loopback range for Leaf devices
+  - prefix: 10.0.0.0/32
+    type: network
+    role: FABRIC::LOOPBACK0::ROUTER_ID  # Individual router IDs for specific devices
+  - prefix: 10.0.0.1/32
+    type: network
+    role: FABRIC::LOOPBACK0::ROUTER_ID
+  - prefix: 10.0.0.16/32
+    type: network
+    role: FABRIC::LOOPBACK0::ROUTER_ID
+  - prefix: 10.0.0.17/32
+    type: network
+    role: FABRIC::LOOPBACK0::ROUTER_ID
+  - prefix: 10.0.0.18/32
+    type: network
+    role: FABRIC::LOOPBACK0::ROUTER_ID
+  - prefix: 10.0.0.19/32
+    type: network
+    role: FABRIC::LOOPBACK0::ROUTER_ID
+devices:
+  - name: SPN00.FAB00.EWR00  # Device name
+    model: 9364C-GX  # Device model, Nexus 9364C-GX as a spine device
+    role: SPN  # Assigned role as a spine switch
+    nso_ned_id: NX-OS-nc-10.3  # Cisco NX-OS Netconf NED ID for NSO integration
+    interfaces:
+      - name: mgmt0  # Interface name
+        enabled: True  # Management interface enabled for out-of-band management
+        ip_addresses:
+          - ip_address: 192.168.2.101/24  # Assigned IP address within the management subnet
+            primary_ip4: true  # Primary management IP for remote access and monitoring
+      - name: lo0
+        enabled: True
+        type: virtual  # Virtual interface type for loopbacks
+        ip_addresses:
+          - ip_address: 10.0.0.0/32  # Unique loopback IP for device identification in routing
+      - name: po101
+        enabled: False  # Port-channel initially disabled; enabled in a later deployment stage
+        mtu: 9216  # Jumbo MTU setting to support high-throughput traffic
+        type: lag  # Link aggregation for redundancy to leaf switches
+      - name: po102
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po103
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po104
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: eth1/[1-8]
+        enabled: True  # Physical interfaces enabled to support traffic to leaf switches
+        mtu: 9216
+        role: Downlink  # Role as downlink ports for leaf connectivity
+      - name: eth1/[9-64]
+        status: Unused  # Designated as unused to keep them isolated from the primary fabric
+        enabled: False  # Disabled to prevent accidental traffic on unused ports
+        mode: Access  # Set to access mode in case VLAN traffic is needed in future
+        untagged_vlan: 1  # Assigned default VLAN for unused ports
+    lags:
+      - name: po101
+        members:
+          - member: eth1/1  # Aggregates physical interfaces for increased redundancy and throughput
+          - member: eth1/2
+      - name: po102
+        members:
+          - member: eth1/3
+          - member: eth1/4
+      - name: po103
+        members:
+          - member: eth1/5
+          - member: eth1/6
+      - name: po104
+        members:
+          - member: eth1/7
+          - member: eth1/8
+  - name: SPN01.FAB00.EWR00
+    model: 9364C-GX
+    role: SPN
+    nso_ned_id: NX-OS-nc-10.3
+    interfaces:
+      - name: mgmt0
+        enabled: True
+        ip_addresses:
+          - ip_address: 192.168.2.102/24
+            primary_ip4: true
+      - name: lo0
+        enabled: True
+        type: virtual
+        ip_addresses:
+          - ip_address: 10.0.0.1/32
+      - name: po201
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po202
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po203
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po204
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: eth1/[1-8]
+        enabled: True
+        mtu: 9216
+        role: Downlink
+      - name: eth1/[9-64]
+        status: Unused
+        enabled: False
+        mode: Access
+        untagged_vlan: 1
+    lags:
+      - name: po201
+        members:
+          - member: eth1/1
+          - member: eth1/2
+      - name: po202
+        members:
+          - member: eth1/3
+          - member: eth1/4
+      - name: po203
+        members:
+          - member: eth1/5
+          - member: eth1/6
+      - name: po204
+        members:
+          - member: eth1/7
+          - member: eth1/8
+  - name: DLF00.FAB00.EWR00
+    model: 93108TC-EX
+    role: DLF
+    nso_ned_id: NX-OS-nc-10.3
+    interfaces:
+      - name: mgmt0
+        enabled: True
+        ip_addresses:
+          - ip_address: 192.168.2.103/24
+            primary_ip4: true
+      - name: lo0
+        enabled: True
+        type: virtual
+        ip_addresses:
+          - ip_address: 10.0.0.16/32
+      - name: po101
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po201
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: eth1/[1-4]
+        enabled: True
+        mtu: 9216
+        role: Uplink
+      - name: eth1/[5-54]
+        status: Unused
+        enabled: False
+        mode: Access
+        untagged_vlan: 1
+    lags:
+      - name: po101
+        members:
+          - member: eth1/1
+          - member: eth1/2
+      - name: po201
+        members:
+          - member: eth1/3
+          - member: eth1/4
+  - name: DLF01.FAB00.EWR00
+    model: 93108TC-EX
+    role: DLF
+    nso_ned_id: NX-OS-nc-10.3
+    interfaces:
+      - name: mgmt0
+        enabled: True
+        ip_addresses:
+          - ip_address: 192.168.2.104/24
+            primary_ip4: true
+      - name: lo0
+        enabled: True
+        type: virtual
+        ip_addresses:
+          - ip_address: 10.0.0.17/32
+      - name: po102
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po202
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: eth1/[1-4]
+        enabled: True
+        mtu: 9216
+        role: Uplink
+      - name: eth1/[5-54]
+        status: Unused
+        enabled: False
+        mode: Access
+        untagged_vlan: 1
+    lags:
+      - name: po102
+        members:
+          - member: eth1/1
+          - member: eth1/2
+      - name: po202
+        members:
+          - member: eth1/3
+          - member: eth1/4
+  - name: DLF02.FAB00.EWR00
+    model: 93108TC-EX
+    role: DLF
+    nso_ned_id: NX-OS-nc-10.3
+    interfaces:
+      - name: mgmt0
+        enabled: True
+        ip_addresses:
+          - ip_address: 192.168.2.105/24
+            primary_ip4: true
+      - name: lo0
+        enabled: True
+        type: virtual
+        ip_addresses:
+          - ip_address: 10.0.0.18/32
+      - name: po103
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po203
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: eth1/[1-4]
+        enabled: True
+        mtu: 9216
+        role: Uplink
+      - name: eth1/[5-54]
+        status: Unused
+        enabled: False
+        mode: Access
+        untagged_vlan: 1
+    lags:
+      - name: po103
+        members:
+          - member: eth1/1
+          - member: eth1/2
+      - name: po203
+        members:
+          - member: eth1/3
+          - member: eth1/4
+  - name: DLF03.FAB00.EWR00
+    model: 93108TC-EX
+    role: DLF
+    nso_ned_id: NX-OS-nc-10.3
+    interfaces:
+      - name: mgmt0
+        enabled: True
+        ip_addresses:
+          - ip_address: 192.168.2.106/24
+            primary_ip4: true
+      - name: lo0
+        enabled: True
+        type: virtual
+        ip_addresses:
+          - ip_address: 10.0.0.19/32
+      - name: po104
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: po204
+        enabled: False
+        mtu: 9216
+        type: lag
+      - name: eth1/[1-4]
+        enabled: True
+        mtu: 9216
+        role: Uplink
+      - name: eth1/[5-54]
+        status: Unused
+        enabled: False
+        mode: Access
+        untagged_vlan: 1
+    lags:
+      - name: po104
+        members:
+          - member: eth1/1
+          - member: eth1/2
+      - name: po204
+        members:
+          - member: eth1/3
+          - member: eth1/4
+connections:
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/1
+    b_device: DLF00.FAB00.EWR00
+    b_interface: eth1/1
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/2
+    b_device: DLF00.FAB00.EWR00
+    b_interface: eth1/2
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/3
+    b_device: DLF01.FAB00.EWR00
+    b_interface: eth1/1
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/4
+    b_device: DLF01.FAB00.EWR00
+    b_interface: eth1/2
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/5
+    b_device: DLF02.FAB00.EWR00
+    b_interface: eth1/1
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/6
+    b_device: DLF02.FAB00.EWR00
+    b_interface: eth1/2
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/7
+    b_device: DLF03.FAB00.EWR00
+    b_interface: eth1/1
+  - a_device: SPN00.FAB00.EWR00
+    a_interface: eth1/8
+    b_device: DLF03.FAB00.EWR00
+    b_interface: eth1/2
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/1
+    b_device: DLF00.FAB00.EWR00
+    b_interface: eth1/3
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/2
+    b_device: DLF00.FAB00.EWR00
+    b_interface: eth1/4
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/3
+    b_device: DLF01.FAB00.EWR00
+    b_interface: eth1/3
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/4
+    b_device: DLF01.FAB00.EWR00
+    b_interface: eth1/4
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/5
+    b_device: DLF02.FAB00.EWR00
+    b_interface: eth1/3
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/6
+    b_device: DLF02.FAB00.EWR00
+    b_interface: eth1/4
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/7
+    b_device: DLF03.FAB00.EWR00
+    b_interface: eth1/3
+  - a_device: SPN01.FAB00.EWR00
+    a_interface: eth1/8
+    b_device: DLF03.FAB00.EWR00
+    b_interface: eth1/4
+
+```
+</details>
+
+### **Demo**
+
+In this demonstration, we will show how the NFaaS App integrates with Nautobot to pull inventory files from repositories, process them by updating the Nautobot database, and deploy network configurations using Cisco NSO. Starting from a clean Nautobot database, this demo will guide you through configuring the NFaaS App and managing the network inventory to complete the deployment process. The following steps will guide you through the demo:
+
+1. **Configure NFaaS App**: Set up the NFaaS App by providing essential configuration details, such as the GitHub organization URL, NFaaS inventory repository, and GitHub API token. This ensures the app can access and manage the necessary resources.
+2. **Load Inventory**: Populate Nautobot with network inventory from the defined GitHub repository, using the NFaaS App to bring in devices, roles, locations, and configurations.
+3. **Add a New Fabric**: Define a new fabric, detailing the spine/leaf setup and generating a corresponding YAML-based Low-Level Design (LLD).
+4. **Update the Fabric**: Modify the configuration of an existing fabric, such as enabling additional links or changing the VLAN setup, and redeploy the updated design.
+5. **Delete the Fabric**: Finally, remove the fabric from Nautobot, demonstrating the full lifecycle management of a network fabric using the NFaaS App.
 
 ## Conclusion
 
