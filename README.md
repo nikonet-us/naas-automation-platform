@@ -845,6 +845,22 @@ In this demonstration, we will show how the NFaaS App integrates with Nautobot t
 
 This screenshot illustrates the initial state of Nautobot, with a clean database and NFaaS App installed.
 
+#### **Configure NFaaS App**
+
+To configure the NFaaS App, follow these steps to navigate through the settings and provide the necessary information:
+
+1. **Navigate to Settings**:  
+   To update the NFaaS App settings, navigate to **Apps > NFaaS > Settings** within Nautobot. The screenshot below shows the starting point for configuration:  
+   ![Clean NFaaS Settings](screenshots/nfaas_settings_clean.png)
+
+2. **Edit Settings**:  
+   Click the **Edit** button to begin updating the NFaaS settings. This action allows you to provide essential configuration details, such as the GitHub organization URL, NFaaS inventory repository, and GitHub API token:  
+   ![Edit NFaaS Settings](screenshots/nfaas_settings_edit.png)
+
+3. **Update Information**:  
+   Populate the fields with the required information and click **Update** to save the configuration changes:  
+   ![Update NFaaS Settings](screenshots/nfaas_settings.png)
+
 ## Conclusion
 
 The NaaS Automation Platform showcases the transformative power of network automation, integrating advanced tools and workflows to enhance scalability, reliability, and operational efficiency. By adopting NetDevOps practices and Infrastructure as Code (IaC), NaaS minimizes manual intervention and accelerates service delivery across various environments. With continuous innovation and real-time monitoring, it enables organizations to adapt swiftly to evolving demands, ensuring both seamless operations and future scalability. Ultimately, NaaS not only simplifies network management but unlocks the full potential of automation, driving strategic value in modern IT ecosystems.
