@@ -840,6 +840,11 @@ In this demonstration, we will show how the NFaaS App integrates with Nautobot t
 4. **Update the Fabric**: Modify the configuration of an existing fabric, such as enabling additional links or changing the VLAN setup, and redeploy the updated design.
 5. **Delete the Fabric**: Finally, remove the fabric from Nautobot, demonstrating the full lifecycle management of a network fabric using the NFaaS App.
 
+#### Starting with a Clean Nautobot Database
+![Starting with a clean Nautobot database](screenshots/nautobot_clean.png)
+
+This screenshot illustrates the initial state of Nautobot, with a clean database and NFaaS App installed.
+
 ## Conclusion
 
 The NaaS Automation Platform showcases the transformative power of network automation, integrating advanced tools and workflows to enhance scalability, reliability, and operational efficiency. By adopting NetDevOps practices and Infrastructure as Code (IaC), NaaS minimizes manual intervention and accelerates service delivery across various environments. With continuous innovation and real-time monitoring, it enables organizations to adapt swiftly to evolving demands, ensuring both seamless operations and future scalability. Ultimately, NaaS not only simplifies network management but unlocks the full potential of automation, driving strategic value in modern IT ecosystems.
